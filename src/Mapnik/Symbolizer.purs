@@ -14,6 +14,10 @@ import Prim (Array, Boolean, Int, Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 data Symbolizer =
     PointSymbolizer {
@@ -207,6 +211,10 @@ data Symbolizer =
 
 derive instance genericSymbolizer :: Generic Symbolizer _
 
+instance encodeJsonSymbolizer :: EncodeJson Symbolizer where encodeJson = genericEncodeJson
+
+instance decodeJsonSymbolizer :: DecodeJson Symbolizer where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _PointSymbolizer :: Prism' Symbolizer { file :: Maybe PathExpression, opacity :: Maybe (Prop Number), allowOverlap :: Maybe (Prop Boolean), ignorePlacement :: Maybe (Prop Boolean), pointPlacement :: Maybe (Prop PointPlacement), imageTransform :: Maybe (Prop Transform), simplifyTolerance :: Maybe (Prop Number), smooth :: Maybe (Prop Number), clip :: Maybe (Prop Boolean), compOp :: Maybe (Prop CompositeMode), geometryTransform :: Maybe (Prop Transform), simplifyAlgorithm :: Maybe (Prop SimplifyAlgorithm) }
@@ -294,6 +302,10 @@ data Prop a =
 
 derive instance genericProp :: Generic (Prop a) _
 
+instance encodeJsonProp :: EncodeJson a => EncodeJson (Prop a) where encodeJson = genericEncodeJson
+
+instance decodeJsonProp :: DecodeJson a => DecodeJson (Prop a) where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _Exp :: forall a. Prism' (Prop a) Expression
@@ -319,6 +331,10 @@ newtype Stop =
 
 derive instance genericStop :: Generic Stop _
 
+instance encodeJsonStop :: EncodeJson Stop where encodeJson = genericEncodeJson
+
+instance decodeJsonStop :: DecodeJson Stop where decodeJson = genericDecodeJson
+
 derive instance newtypeStop :: Newtype Stop _
 
 
@@ -336,6 +352,10 @@ newtype Colorizer =
     }
 
 derive instance genericColorizer :: Generic Colorizer _
+
+instance encodeJsonColorizer :: EncodeJson Colorizer where encodeJson = genericEncodeJson
+
+instance decodeJsonColorizer :: DecodeJson Colorizer where decodeJson = genericDecodeJson
 
 derive instance newtypeColorizer :: Newtype Colorizer _
 
@@ -364,6 +384,10 @@ newtype TextProperties =
 
 derive instance genericTextProperties :: Generic TextProperties _
 
+instance encodeJsonTextProperties :: EncodeJson TextProperties where encodeJson = genericEncodeJson
+
+instance decodeJsonTextProperties :: DecodeJson TextProperties where decodeJson = genericDecodeJson
+
 derive instance newtypeTextProperties :: Newtype TextProperties _
 
 
@@ -382,6 +406,10 @@ newtype TextSymProperties =
 
 derive instance genericTextSymProperties :: Generic TextSymProperties _
 
+instance encodeJsonTextSymProperties :: EncodeJson TextSymProperties where encodeJson = genericEncodeJson
+
+instance decodeJsonTextSymProperties :: DecodeJson TextSymProperties where decodeJson = genericDecodeJson
+
 derive instance newtypeTextSymProperties :: Newtype TextSymProperties _
 
 
@@ -397,6 +425,10 @@ newtype GroupSymProperties =
     }
 
 derive instance genericGroupSymProperties :: Generic GroupSymProperties _
+
+instance encodeJsonGroupSymProperties :: EncodeJson GroupSymProperties where encodeJson = genericEncodeJson
+
+instance decodeJsonGroupSymProperties :: DecodeJson GroupSymProperties where decodeJson = genericDecodeJson
 
 derive instance newtypeGroupSymProperties :: Newtype GroupSymProperties _
 
@@ -414,6 +446,10 @@ newtype GroupRule =
     }
 
 derive instance genericGroupRule :: Generic GroupRule _
+
+instance encodeJsonGroupRule :: EncodeJson GroupRule where encodeJson = genericEncodeJson
+
+instance decodeJsonGroupRule :: DecodeJson GroupRule where decodeJson = genericDecodeJson
 
 derive instance newtypeGroupRule :: Newtype GroupRule _
 
@@ -433,6 +469,10 @@ data GroupLayout =
     }
 
 derive instance genericGroupLayout :: Generic GroupLayout _
+
+instance encodeJsonGroupLayout :: EncodeJson GroupLayout where encodeJson = genericEncodeJson
+
+instance decodeJsonGroupLayout :: DecodeJson GroupLayout where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -468,6 +508,10 @@ newtype TextLayoutProperties =
 
 derive instance genericTextLayoutProperties :: Generic TextLayoutProperties _
 
+instance encodeJsonTextLayoutProperties :: EncodeJson TextLayoutProperties where encodeJson = genericEncodeJson
+
+instance decodeJsonTextLayoutProperties :: DecodeJson TextLayoutProperties where decodeJson = genericDecodeJson
+
 derive instance newtypeTextLayoutProperties :: Newtype TextLayoutProperties _
 
 
@@ -492,6 +536,10 @@ newtype TextFormatProperties =
     }
 
 derive instance genericTextFormatProperties :: Generic TextFormatProperties _
+
+instance encodeJsonTextFormatProperties :: EncodeJson TextFormatProperties where encodeJson = genericEncodeJson
+
+instance decodeJsonTextFormatProperties :: DecodeJson TextFormatProperties where decodeJson = genericDecodeJson
 
 derive instance newtypeTextFormatProperties :: Newtype TextFormatProperties _
 
@@ -538,6 +586,10 @@ data Format =
 
 derive instance genericFormat :: Generic Format _
 
+instance encodeJsonFormat :: EncodeJson Format where encodeJson = genericEncodeJson
+
+instance decodeJsonFormat :: DecodeJson Format where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _FormatExp :: Prism' Format Expression
@@ -576,6 +628,10 @@ newtype TextPlacements =
 
 derive instance genericTextPlacements :: Generic TextPlacements _
 
+instance encodeJsonTextPlacements :: EncodeJson TextPlacements where encodeJson = genericEncodeJson
+
+instance decodeJsonTextPlacements :: DecodeJson TextPlacements where decodeJson = genericDecodeJson
+
 derive instance newtypeTextPlacements :: Newtype TextPlacements _
 
 
@@ -588,6 +644,10 @@ data Font =
   | FaceName String
 
 derive instance genericFont :: Generic Font _
+
+instance encodeJsonFont :: EncodeJson Font where encodeJson = genericEncodeJson
+
+instance decodeJsonFont :: DecodeJson Font where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------

@@ -11,6 +11,10 @@ import Prim (Boolean, Int, Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 data Value =
     TextValue String
@@ -20,6 +24,10 @@ data Value =
   | NullValue
 
 derive instance genericValue :: Generic Value _
+
+instance encodeJsonValue :: EncodeJson Value where encodeJson = genericEncodeJson
+
+instance decodeJsonValue :: DecodeJson Value where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------

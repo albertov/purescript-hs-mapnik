@@ -26,6 +26,7 @@
     "purescript-generics": "^4.0.0",
     "purescript-tuples": "^4.1.0",
     "purescript-generics-rep": "^5.3.0",
-    "purescript-maps": "^3.5.2"
+    "purescript-maps": "^3.5.2",
+    "purescript-argonaut-generic": "^1.2.0"
   }
 }

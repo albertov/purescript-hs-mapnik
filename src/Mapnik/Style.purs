@@ -14,6 +14,10 @@ import Prim (Array, Boolean, Number)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 newtype Style =
     Style {
@@ -27,6 +31,10 @@ newtype Style =
     }
 
 derive instance genericStyle :: Generic Style _
+
+instance encodeJsonStyle :: EncodeJson Style where encodeJson = genericEncodeJson
+
+instance decodeJsonStyle :: DecodeJson Style where decodeJson = genericDecodeJson
 
 derive instance newtypeStyle :: Newtype Style _
 

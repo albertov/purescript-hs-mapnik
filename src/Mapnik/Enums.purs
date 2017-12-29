@@ -10,6 +10,10 @@ import Data.Symbol (SProxy(SProxy))
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 data CompositeMode =
     Clear
@@ -51,6 +55,10 @@ data CompositeMode =
   | Divide
 
 derive instance genericCompositeMode :: Generic CompositeMode _
+
+instance encodeJsonCompositeMode :: EncodeJson CompositeMode where encodeJson = genericEncodeJson
+
+instance decodeJsonCompositeMode :: DecodeJson CompositeMode where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -290,6 +298,10 @@ data AspectFixMode =
 
 derive instance genericAspectFixMode :: Generic AspectFixMode _
 
+instance encodeJsonAspectFixMode :: EncodeJson AspectFixMode where encodeJson = genericEncodeJson
+
+instance decodeJsonAspectFixMode :: DecodeJson AspectFixMode where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _GrowBox :: Prism' AspectFixMode Unit
@@ -354,6 +366,10 @@ data LineCap =
 
 derive instance genericLineCap :: Generic LineCap _
 
+instance encodeJsonLineCap :: EncodeJson LineCap where encodeJson = genericEncodeJson
+
+instance decodeJsonLineCap :: DecodeJson LineCap where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _ButtCap :: Prism' LineCap Unit
@@ -382,6 +398,10 @@ data LineJoin =
   | BevelJoin
 
 derive instance genericLineJoin :: Generic LineJoin _
+
+instance encodeJsonLineJoin :: EncodeJson LineJoin where encodeJson = genericEncodeJson
+
+instance decodeJsonLineJoin :: DecodeJson LineJoin where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -416,6 +436,10 @@ data LineRasterizer =
 
 derive instance genericLineRasterizer :: Generic LineRasterizer _
 
+instance encodeJsonLineRasterizer :: EncodeJson LineRasterizer where encodeJson = genericEncodeJson
+
+instance decodeJsonLineRasterizer :: DecodeJson LineRasterizer where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _RasterizerFull :: Prism' LineRasterizer Unit
@@ -436,6 +460,10 @@ data HaloRasterizer =
   | HaloRasterizerFast
 
 derive instance genericHaloRasterizer :: Generic HaloRasterizer _
+
+instance encodeJsonHaloRasterizer :: EncodeJson HaloRasterizer where encodeJson = genericEncodeJson
+
+instance decodeJsonHaloRasterizer :: DecodeJson HaloRasterizer where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -458,6 +486,10 @@ data PointPlacement =
 
 derive instance genericPointPlacement :: Generic PointPlacement _
 
+instance encodeJsonPointPlacement :: EncodeJson PointPlacement where encodeJson = genericEncodeJson
+
+instance decodeJsonPointPlacement :: DecodeJson PointPlacement where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _CentroidPointPlacement :: Prism' PointPlacement Unit
@@ -478,6 +510,10 @@ data PatternAlignment =
   | GlobalAlignment
 
 derive instance genericPatternAlignment :: Generic PatternAlignment _
+
+instance encodeJsonPatternAlignment :: EncodeJson PatternAlignment where encodeJson = genericEncodeJson
+
+instance decodeJsonPatternAlignment :: DecodeJson PatternAlignment where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -500,6 +536,10 @@ data DebugMode =
   | DebugModeRings
 
 derive instance genericDebugMode :: Generic DebugMode _
+
+instance encodeJsonDebugMode :: EncodeJson DebugMode where encodeJson = genericEncodeJson
+
+instance decodeJsonDebugMode :: DecodeJson DebugMode where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -530,6 +570,10 @@ data MarkerPlacement =
   | MarkerVertexLastPlacement
 
 derive instance genericMarkerPlacement :: Generic MarkerPlacement _
+
+instance encodeJsonMarkerPlacement :: EncodeJson MarkerPlacement where encodeJson = genericEncodeJson
+
+instance decodeJsonMarkerPlacement :: DecodeJson MarkerPlacement where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -571,6 +615,10 @@ data MarkerMultiPolicy =
 
 derive instance genericMarkerMultiPolicy :: Generic MarkerMultiPolicy _
 
+instance encodeJsonMarkerMultiPolicy :: EncodeJson MarkerMultiPolicy where encodeJson = genericEncodeJson
+
+instance decodeJsonMarkerMultiPolicy :: DecodeJson MarkerMultiPolicy where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _MarkerEachMulti :: Prism' MarkerMultiPolicy Unit
@@ -600,6 +648,10 @@ data TextTransform =
   | Reverse
 
 derive instance genericTextTransform :: Generic TextTransform _
+
+instance encodeJsonTextTransform :: EncodeJson TextTransform where encodeJson = genericEncodeJson
+
+instance decodeJsonTextTransform :: DecodeJson TextTransform where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -642,6 +694,10 @@ data LabelPlacement =
 
 derive instance genericLabelPlacement :: Generic LabelPlacement _
 
+instance encodeJsonLabelPlacement :: EncodeJson LabelPlacement where encodeJson = genericEncodeJson
+
+instance decodeJsonLabelPlacement :: DecodeJson LabelPlacement where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _PointPlacement :: Prism' LabelPlacement Unit
@@ -676,6 +732,10 @@ data VerticalAlignment =
   | VAuto
 
 derive instance genericVerticalAlignment :: Generic VerticalAlignment _
+
+instance encodeJsonVerticalAlignment :: EncodeJson VerticalAlignment where encodeJson = genericEncodeJson
+
+instance decodeJsonVerticalAlignment :: DecodeJson VerticalAlignment where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -712,6 +772,10 @@ data HorizontalAlignment =
   | HAdjust
 
 derive instance genericHorizontalAlignment :: Generic HorizontalAlignment _
+
+instance encodeJsonHorizontalAlignment :: EncodeJson HorizontalAlignment where encodeJson = genericEncodeJson
+
+instance decodeJsonHorizontalAlignment :: DecodeJson HorizontalAlignment where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -754,6 +818,10 @@ data JustifyAlignment =
 
 derive instance genericJustifyAlignment :: Generic JustifyAlignment _
 
+instance encodeJsonJustifyAlignment :: EncodeJson JustifyAlignment where encodeJson = genericEncodeJson
+
+instance decodeJsonJustifyAlignment :: DecodeJson JustifyAlignment where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _JLeft :: Prism' JustifyAlignment Unit
@@ -790,6 +858,10 @@ data Upright =
   | UprightRightOnly
 
 derive instance genericUpright :: Generic Upright _
+
+instance encodeJsonUpright :: EncodeJson Upright where encodeJson = genericEncodeJson
+
+instance decodeJsonUpright :: DecodeJson Upright where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -841,6 +913,10 @@ data Direction =
   | DirectionDown
 
 derive instance genericDirection :: Generic Direction _
+
+instance encodeJsonDirection :: EncodeJson Direction where encodeJson = genericEncodeJson
+
+instance decodeJsonDirection :: DecodeJson Direction where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -905,6 +981,10 @@ data PlacementDirection =
   | PExact
 
 derive instance genericPlacementDirection :: Generic PlacementDirection _
+
+instance encodeJsonPlacementDirection :: EncodeJson PlacementDirection where encodeJson = genericEncodeJson
+
+instance decodeJsonPlacementDirection :: DecodeJson PlacementDirection where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -972,6 +1052,10 @@ data GammaMethod =
 
 derive instance genericGammaMethod :: Generic GammaMethod _
 
+instance encodeJsonGammaMethod :: EncodeJson GammaMethod where encodeJson = genericEncodeJson
+
+instance decodeJsonGammaMethod :: DecodeJson GammaMethod where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _GammaPower :: Prism' GammaMethod Unit
@@ -1012,6 +1096,10 @@ data ColorizerMode =
   | CExact
 
 derive instance genericColorizerMode :: Generic ColorizerMode _
+
+instance encodeJsonColorizerMode :: EncodeJson ColorizerMode where encodeJson = genericEncodeJson
+
+instance decodeJsonColorizerMode :: DecodeJson ColorizerMode where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -1060,6 +1148,10 @@ data ScalingMethod =
   | Blackman
 
 derive instance genericScalingMethod :: Generic ScalingMethod _
+
+instance encodeJsonScalingMethod :: EncodeJson ScalingMethod where encodeJson = genericEncodeJson
+
+instance decodeJsonScalingMethod :: DecodeJson ScalingMethod where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------
@@ -1174,6 +1266,10 @@ data SimplifyAlgorithm =
 
 derive instance genericSimplifyAlgorithm :: Generic SimplifyAlgorithm _
 
+instance encodeJsonSimplifyAlgorithm :: EncodeJson SimplifyAlgorithm where encodeJson = genericEncodeJson
+
+instance decodeJsonSimplifyAlgorithm :: DecodeJson SimplifyAlgorithm where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _RadialDistance :: Prism' SimplifyAlgorithm Unit
@@ -1206,6 +1302,10 @@ data FilterMode =
   | FilterFirst
 
 derive instance genericFilterMode :: Generic FilterMode _
+
+instance encodeJsonFilterMode :: EncodeJson FilterMode where encodeJson = genericEncodeJson
+
+instance decodeJsonFilterMode :: DecodeJson FilterMode where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------

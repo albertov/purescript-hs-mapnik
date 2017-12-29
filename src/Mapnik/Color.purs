@@ -11,11 +11,19 @@ import Prim (Int)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 data Color =
     RGBA Int Int Int Int
 
 derive instance genericColor :: Generic Color _
+
+instance encodeJsonColor :: EncodeJson Color where encodeJson = genericEncodeJson
+
+instance decodeJsonColor :: DecodeJson Color where decodeJson = genericDecodeJson
 
 
 --------------------------------------------------------------------------------

@@ -11,11 +11,19 @@ import Prim (Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 newtype Expression =
     Expression String
 
 derive instance genericExpression :: Generic Expression _
+
+instance encodeJsonExpression :: EncodeJson Expression where encodeJson = genericEncodeJson
+
+instance decodeJsonExpression :: DecodeJson Expression where decodeJson = genericDecodeJson
 
 derive instance newtypeExpression :: Newtype Expression _
 
@@ -29,6 +37,10 @@ newtype PathExpression =
 
 derive instance genericPathExpression :: Generic PathExpression _
 
+instance encodeJsonPathExpression :: EncodeJson PathExpression where encodeJson = genericEncodeJson
+
+instance decodeJsonPathExpression :: DecodeJson PathExpression where decodeJson = genericDecodeJson
+
 derive instance newtypePathExpression :: Newtype PathExpression _
 
 
@@ -40,6 +52,10 @@ newtype Transform =
     Transform String
 
 derive instance genericTransform :: Generic Transform _
+
+instance encodeJsonTransform :: EncodeJson Transform where encodeJson = genericEncodeJson
+
+instance decodeJsonTransform :: DecodeJson Transform where decodeJson = genericDecodeJson
 
 derive instance newtypeTransform :: Newtype Transform _
 
@@ -58,6 +74,10 @@ newtype Box =
 
 derive instance genericBox :: Generic Box _
 
+instance encodeJsonBox :: EncodeJson Box where encodeJson = genericEncodeJson
+
+instance decodeJsonBox :: DecodeJson Box where decodeJson = genericDecodeJson
+
 derive instance newtypeBox :: Newtype Box _
 
 
@@ -71,6 +91,10 @@ data Dash =
 
 derive instance genericDash :: Generic Dash _
 
+instance encodeJsonDash :: EncodeJson Dash where encodeJson = genericEncodeJson
+
+instance decodeJsonDash :: DecodeJson Dash where decodeJson = genericDecodeJson
+
 
 --------------------------------------------------------------------------------
 _Dash :: Prism' Dash { a :: Number, b :: Number }
@@ -83,6 +107,10 @@ newtype FontFeatureSettings =
     FontFeatureSettings String
 
 derive instance genericFontFeatureSettings :: Generic FontFeatureSettings _
+
+instance encodeJsonFontFeatureSettings :: EncodeJson FontFeatureSettings where encodeJson = genericEncodeJson
+
+instance decodeJsonFontFeatureSettings :: DecodeJson FontFeatureSettings where decodeJson = genericDecodeJson
 
 derive instance newtypeFontFeatureSettings :: Newtype FontFeatureSettings _
 

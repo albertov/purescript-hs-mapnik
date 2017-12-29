@@ -13,6 +13,10 @@ import Prim (Array, Boolean, Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
+import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
 
 newtype Rule =
     Rule {
@@ -26,6 +30,10 @@ newtype Rule =
     }
 
 derive instance genericRule :: Generic Rule _
+
+instance encodeJsonRule :: EncodeJson Rule where encodeJson = genericEncodeJson
+
+instance decodeJsonRule :: DecodeJson Rule where decodeJson = genericDecodeJson
 
 derive instance newtypeRule :: Newtype Rule _
 
