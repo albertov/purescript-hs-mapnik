@@ -1,0 +1,154 @@
+diff --git a/src/Mapnik/Symbolizer.purs b/src/Mapnik/Symbolizer.purs
+index 305ab8c..8556d22 100644
+--- a/src/Mapnik/Symbolizer.purs
++++ b/src/Mapnik/Symbolizer.purs
+@@ -4,7 +4,7 @@ module Mapnik.Symbolizer where
+ import Data.Lens (Iso', Lens', Prism', lens, prism')
+ import Data.Lens.Iso.Newtype (_Newtype)
+ import Data.Lens.Record (prop)
+-import Data.Maybe (Maybe, Maybe(..))
++import Data.Maybe (maybe, Maybe, Maybe(..))
+ import Data.Newtype (class Newtype)
+ import Data.Symbol (SProxy(SProxy))
+ import Mapnik.Color (Color)
+@@ -13,12 +13,20 @@ import Mapnik.Enums (ColorizerMode, CompositeMode, DebugMode, Direction, GammaMe
+ import Prim (Array, Boolean, Int, Number, String)
+ 
+ import Prelude
++import Data.Either (Either(..))
++import Data.Traversable (traverse)
++import Data.StrMap as SM
+ import Data.Generic.Rep (class Generic)
++import Data.Argonaut.Core (Json, fromArray, fromBoolean, fromNumber, fromObject, fromString, jsonNull)
+ import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
+ import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
+ import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
+ import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+ 
++import Data.List (List(..), (:), toUnfoldable)
++import Data.Array (head)
++import Data.Tuple (Tuple(..))
++
+ data Symbolizer =
+     PointSymbolizer {
+       file :: Maybe PathExpression
+@@ -447,9 +455,21 @@ newtype GroupRule =
+ 
+ derive instance genericGroupRule :: Generic GroupRule _
+ 
+-instance encodeJsonGroupRule :: EncodeJson GroupRule where encodeJson = genericEncodeJson
+-
+-instance decodeJsonGroupRule :: DecodeJson GroupRule where decodeJson = genericDecodeJson
++instance encodeJsonGroupRule :: EncodeJson GroupRule where
++  encodeJson (GroupRule {symbolizers,filter,repeatKey}) = fromObject $ SM.fromFoldable
++    $ Tuple "symbolizers" (fromArray (genericEncodeJson <$> symbolizers))
++    : Tuple "filter" (encodeJson filter)
++    : Tuple "repeatKey" (encodeJson repeatKey)
++    : Nil
++
++instance decodeJsonGroupRule :: DecodeJson GroupRule where
++    decodeJson json = decodeJson json >>= \ obj -> do
++      symbolizersJ <- maybe (Left "Expected field 'symbolizers'") Right
++                   $ SM.lookup "symbolizers" obj
++      symbolizers <- traverse decodeJson =<< decodeJson symbolizersJ
++      filter <- traverse decodeJson (SM.lookup "filter" obj)
++      repeatKey <- traverse decodeJson (SM.lookup "repeatKey" obj)
++      pure (GroupRule {symbolizers,filter,repeatKey})
+ 
+ derive instance newtypeGroupRule :: Newtype GroupRule _
+ 
+@@ -586,9 +606,91 @@ data Format =
+ 
+ derive instance genericFormat :: Generic Format _
+ 
+-instance encodeJsonFormat :: EncodeJson Format where encodeJson = genericEncodeJson
+-
+-instance decodeJsonFormat :: DecodeJson Format where decodeJson = genericDecodeJson
++instance encodeJsonFormat :: EncodeJson Format where
++  encodeJson (FormatExp e) = fromObject $ SM.fromFoldable
++    $ Tuple "FormatExp" (encodeJson e)
++    : Nil
++  encodeJson (FormatList xs) = fromObject $ SM.fromFoldable
++    $ Tuple "FormatList" (fromArray (genericEncodeJson <$> xs))
++    : Nil
++  encodeJson (Format f) =
++    let ob = fromObject $ SM.fromFoldable
++           $ Tuple "font" (encodeJson f.font)
++           : Tuple "textSize" (encodeJson f.textSize)
++           : Tuple "opacity" (encodeJson f.opacity)
++           : Tuple "characterSpacing" (encodeJson f.characterSpacing)
++           : Tuple "lineSpacing" (encodeJson f.lineSpacing)
++           : Tuple "wrapBefore" (encodeJson f.wrapBefore)
++           : Tuple "repeatWrapChar" (encodeJson f.repeatWrapChar)
++           : Tuple "textTransform" (encodeJson f.textTransform)
++           : Tuple "fill" (encodeJson f.fill)
++           : Tuple "haloFill" (encodeJson f.haloFill)
++           : Tuple "haloRadius" (encodeJson f.haloRadius)
++           : Tuple "ffSettings" (encodeJson f.ffSettings)
++           : Tuple "next" (genericEncodeJson f.next)
++           : Nil
++    in fromObject $ SM.fromFoldable $ Tuple "Format" ob : Nil
++  encodeJson (FormatLayout f) =
++    let ob = fromObject $ SM.fromFoldable
++           $ Tuple "dx" (encodeJson f.dx)
++           : Tuple "dy" (encodeJson f.dy)
++           : Tuple "orientation" (encodeJson f.orientation)
++           : Tuple "textRatio" (encodeJson f.textRatio)
++           : Tuple "wrapWidth" (encodeJson f.wrapWidth)
++           : Tuple "wrapChar" (encodeJson f.wrapChar)
++           : Tuple "wrapBefore" (encodeJson f.wrapBefore)
++           : Tuple "repeatWrapChar" (encodeJson f.repeatWrapChar)
++           : Tuple "rotateDisplacement" (encodeJson f.rotateDisplacement)
++           : Tuple "horizontalAlignment" (encodeJson f.horizontalAlignment)
++           : Tuple "justifyAlignment" (encodeJson f.justifyAlignment)
++           : Tuple "verticalAlignment" (encodeJson f.verticalAlignment)
++           : Tuple "next" (genericEncodeJson f.next)
++           : Nil
++    in fromObject $ SM.fromFoldable $ Tuple "FormatLayout" ob : Nil
++  encodeJson NullFormat =
++    fromObject $ SM.fromFoldable $ Tuple "NullFormat" jsonNull : Nil
++
++
++instance decodeJsonFormat :: DecodeJson Format where
++    decodeJson json = decodeJson json >>= \ o ->
++      maybe (Left "Empty Format obj") id (head (SM.toArrayWithKey go o))
++      where
++        go :: String -> Json -> Either String Format
++        go "NullFormat" _ = Right NullFormat
++        go "FormatList" xs =
++          FormatList <$> (traverse decodeJson =<< decodeJson xs)
++        go "Format" f = decodeJson f >>= \ o -> do
++          font <- traverse decodeJson (SM.lookup "font" o)
++          textSize <- traverse decodeJson (SM.lookup "textSize" o)
++          opacity <- traverse decodeJson (SM.lookup "opacity" o)
++          characterSpacing <- traverse decodeJson (SM.lookup "characterSpacing" o)
++          lineSpacing <- traverse decodeJson (SM.lookup "lineSpacing" o)
++          wrapBefore <- traverse decodeJson (SM.lookup "wrapBefore" o)
++          repeatWrapChar <- traverse decodeJson (SM.lookup "repeatWrapChar" o)
++          textTransform <- traverse decodeJson (SM.lookup "textTransform" o)
++          fill <- traverse decodeJson (SM.lookup "fill" o)
++          haloFill <- traverse decodeJson (SM.lookup "haloFill" o)
++          haloRadius <- traverse decodeJson (SM.lookup "haloRadius" o)
++          ffSettings <- traverse decodeJson (SM.lookup "ffSettings" o)
++          next <- maybe (Left "expected next key") decodeJson (SM.lookup "next" o)
++          pure (Format {font,textSize,opacity,characterSpacing,lineSpacing,wrapBefore,repeatWrapChar,textTransform,fill,haloFill,haloRadius,ffSettings,next})
++        go "FormatLayout" f = decodeJson f >>= \ o -> do
++          dx <- traverse decodeJson (SM.lookup "dx" o)
++          dy <- traverse decodeJson (SM.lookup "dy" o)
++          orientation <- traverse decodeJson (SM.lookup "orientation" o)
++          textRatio <- traverse decodeJson (SM.lookup "textRatio" o)
++          wrapWidth <- traverse decodeJson (SM.lookup "wrapWidth" o)
++          wrapChar <- traverse decodeJson (SM.lookup "wrapChar" o)
++          wrapBefore <- traverse decodeJson (SM.lookup "wrapBefore" o)
++          repeatWrapChar <- traverse decodeJson (SM.lookup "repeatWrapChar" o)
++          rotateDisplacement <- traverse decodeJson (SM.lookup "rotateDisplacement" o)
++          horizontalAlignment <- traverse decodeJson (SM.lookup "horizontalAlignment" o)
++          justifyAlignment <- traverse decodeJson (SM.lookup "justifyAlignment" o)
++          verticalAlignment <- traverse decodeJson (SM.lookup "verticalAlignment" o)
++          next <- maybe (Left "expected next key") decodeJson (SM.lookup "next" o)
++          pure (FormatLayout
++               {dx,dy,orientation,textRatio,wrapWidth,wrapBefore,wrapChar,repeatWrapChar,rotateDisplacement,horizontalAlignment,justifyAlignment,verticalAlignment,next})
++        go _ _ = Left "Invalid Format"
+ 
+ 
+ --------------------------------------------------------------------------------
