@@ -18,6 +18,14 @@ import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
+import Data.Array (head)
+import Data.Maybe (maybe)
+import Data.Foreign (Foreign, F, ForeignError(..), toForeign)
+import Control.Monad.Error.Class (throwError)
+import Data.List.NonEmpty as NEL
+import Data.StrMap as SM
+import Data.Traversable (traverse)
+
 data Symbolizer =
     PointSymbolizer {
       file :: Maybe PathExpression
@@ -446,9 +454,22 @@ newtype GroupRule =
 
 derive instance genericGroupRule :: Generic GroupRule _
 
-instance encodeGroupRule :: Encode GroupRule where encode = genericEncode defaultOptions
+instance encodeGroupRule :: Encode GroupRule where
+  encode (GroupRule x) = toForeign
+    $ SM.insert "symbolizers" (toForeign (encode <$> x.symbolizers))
+    $ SM.insert "filter" (encode x.filter)
+    $ SM.insert "repeatKey" (encode x.repeatKey)
+    $ SM.empty
 
-instance decodeGroupRule :: Decode GroupRule where decode = genericDecode defaultOptions
+instance decodeGroupRule :: Decode GroupRule where
+  decode json = decode json >>= \ obj -> do
+    symbolizersJ <- maybe error pure $ SM.lookup "symbolizers" obj
+    symbolizers <- traverse decode =<< decode symbolizersJ
+    filter <- traverse decode (SM.lookup "filter" obj)
+    repeatKey <- traverse decode (SM.lookup "repeatKey" obj)
+    pure (GroupRule {symbolizers,filter,repeatKey})
+    where
+      error = throwError $ NEL.singleton $ ForeignError "Expected field 'symbolizers'"
 
 derive instance newtypeGroupRule :: Newtype GroupRule _
 
@@ -585,10 +606,65 @@ data Format =
 
 derive instance genericFormat :: Generic Format _
 
-instance encodeFormat :: Encode Format where encode = genericEncode defaultOptions
+instance encodeFormat :: Encode Format where
+  encode (FormatExp e) = toForeign $ SM.insert "FormatExp" (encode e) $ SM.empty
+  encode (FormatList xs) = toForeign $ SM.insert "FormatList" o $ SM.empty
+    where o = toForeign (encode <$> xs)
+  encode (Format f) = toForeign $ SM.insert "Format" o $ SM.empty
+    where o = toForeign
+            $ SM.insert "font" (encode f.font)
+            $ SM.empty
+  encode (FormatLayout f) = toForeign $ SM.insert "FormatLayout" o $ SM.empty
+    where o = toForeign
+            $ SM.insert "dx" (encode f.dx)
+            $ SM.empty
+  encode NullFormat = toForeign $ SM.insert "NullFormat" o $ SM.empty
+    where o = toForeign []
 
-instance decodeFormat :: Decode Format where decode = genericDecode defaultOptions
+instance decodeFormat :: Decode Format where
+  decode json = decode json >>= \ o ->
+    maybe invalid id (head (SM.toArrayWithKey go o))
+    where
+      go :: String -> Foreign -> F Format
+      go "NullFormat" _ = pure NullFormat
+      go "FormatList" xs =
+        FormatList <$> (traverse decode =<< decode xs)
+      go "Format" f = decode f >>= \ o -> do
+        font <- traverse decode (SM.lookup "font" o)
+        textSize <- traverse decode (SM.lookup "textSize" o)
+        opacity <- traverse decode (SM.lookup "opacity" o)
+        characterSpacing <- traverse decode (SM.lookup "characterSpacing" o)
+        lineSpacing <- traverse decode (SM.lookup "lineSpacing" o)
+        wrapBefore <- traverse decode (SM.lookup "wrapBefore" o)
+        repeatWrapChar <- traverse decode (SM.lookup "repeatWrapChar" o)
+        textTransform <- traverse decode (SM.lookup "textTransform" o)
+        fill <- traverse decode (SM.lookup "fill" o)
+        haloFill <- traverse decode (SM.lookup "haloFill" o)
+        haloRadius <- traverse decode (SM.lookup "haloRadius" o)
+        ffSettings <- traverse decode (SM.lookup "ffSettings" o)
+        next <- maybe error decode (SM.lookup "next" o)
+        pure (Format {font,textSize,opacity,characterSpacing,lineSpacing,wrapBefore,repeatWrapChar,textTransform,fill,haloFill,haloRadius,ffSettings,next})
+      go "FormatLayout" f = decode f >>= \ o -> do
+        dx <- traverse decode (SM.lookup "dx" o)
+        dy <- traverse decode (SM.lookup "dy" o)
+        orientation <- traverse decode (SM.lookup "orientation" o)
+        textRatio <- traverse decode (SM.lookup "textRatio" o)
+        wrapWidth <- traverse decode (SM.lookup "wrapWidth" o)
+        wrapChar <- traverse decode (SM.lookup "wrapChar" o)
+        wrapBefore <- traverse decode (SM.lookup "wrapBefore" o)
+        repeatWrapChar <- traverse decode (SM.lookup "repeatWrapChar" o)
+        rotateDisplacement <- traverse decode (SM.lookup "rotateDisplacement" o)
+        horizontalAlignment <- traverse decode (SM.lookup "horizontalAlignment" o)
+        justifyAlignment <- traverse decode (SM.lookup "justifyAlignment" o)
+        verticalAlignment <- traverse decode (SM.lookup "verticalAlignment" o)
+        next <- maybe error decode (SM.lookup "next" o)
+        pure (FormatLayout
+             {dx,dy,orientation,textRatio,wrapWidth,wrapBefore,wrapChar,repeatWrapChar,rotateDisplacement,horizontalAlignment,justifyAlignment,verticalAlignment,next})
+      go _ _ = invalid
 
+      error = throwError $ NEL.singleton $ ForeignError "Expected 'next' key"
+      invalid = throwError $ NEL.singleton $ ForeignError "Invalid Format"
+      
 
 --------------------------------------------------------------------------------
 _FormatExp :: Prism' Format Expression
