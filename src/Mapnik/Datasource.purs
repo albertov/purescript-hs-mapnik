@@ -12,19 +12,18 @@ import Mapnik.Parameter (Value)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 newtype Datasource =
     Datasource (StrMap Value)
 
 derive instance genericDatasource :: Generic Datasource _
 
-instance encodeJsonDatasource :: EncodeJson Datasource where encodeJson = genericEncodeJson
+instance encodeDatasource :: Encode Datasource where encode = genericEncode defaultOptions
 
-instance decodeJsonDatasource :: DecodeJson Datasource where decodeJson = genericDecodeJson
+instance decodeDatasource :: Decode Datasource where decode = genericDecode defaultOptions
 
 derive instance newtypeDatasource :: Newtype Datasource _
 

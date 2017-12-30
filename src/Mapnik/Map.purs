@@ -18,10 +18,9 @@ import Prim (Array, Int, Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 newtype Map a =
     Map {
@@ -42,9 +41,9 @@ newtype Map a =
 
 derive instance genericMap :: Generic (Map a) _
 
-instance encodeJsonMap :: EncodeJson a => EncodeJson (Map a) where encodeJson = genericEncodeJson
+instance encodeMap :: Encode a => Encode (Map a) where encode = genericEncode defaultOptions
 
-instance decodeJsonMap :: DecodeJson a => DecodeJson (Map a) where decodeJson = genericDecodeJson
+instance decodeMap :: Decode a => Decode (Map a) where decode = genericDecode defaultOptions
 
 derive instance newtypeMap :: Newtype (Map a) _
 

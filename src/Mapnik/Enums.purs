@@ -10,10 +10,9 @@ import Data.Symbol (SProxy(SProxy))
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 data CompositeMode =
     Clear
@@ -56,9 +55,9 @@ data CompositeMode =
 
 derive instance genericCompositeMode :: Generic CompositeMode _
 
-instance encodeJsonCompositeMode :: EncodeJson CompositeMode where encodeJson = genericEncodeJson
+instance encodeCompositeMode :: Encode CompositeMode where encode = genericEncode defaultOptions
 
-instance decodeJsonCompositeMode :: DecodeJson CompositeMode where decodeJson = genericDecodeJson
+instance decodeCompositeMode :: Decode CompositeMode where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -298,9 +297,9 @@ data AspectFixMode =
 
 derive instance genericAspectFixMode :: Generic AspectFixMode _
 
-instance encodeJsonAspectFixMode :: EncodeJson AspectFixMode where encodeJson = genericEncodeJson
+instance encodeAspectFixMode :: Encode AspectFixMode where encode = genericEncode defaultOptions
 
-instance decodeJsonAspectFixMode :: DecodeJson AspectFixMode where decodeJson = genericDecodeJson
+instance decodeAspectFixMode :: Decode AspectFixMode where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -366,9 +365,9 @@ data LineCap =
 
 derive instance genericLineCap :: Generic LineCap _
 
-instance encodeJsonLineCap :: EncodeJson LineCap where encodeJson = genericEncodeJson
+instance encodeLineCap :: Encode LineCap where encode = genericEncode defaultOptions
 
-instance decodeJsonLineCap :: DecodeJson LineCap where decodeJson = genericDecodeJson
+instance decodeLineCap :: Decode LineCap where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -399,9 +398,9 @@ data LineJoin =
 
 derive instance genericLineJoin :: Generic LineJoin _
 
-instance encodeJsonLineJoin :: EncodeJson LineJoin where encodeJson = genericEncodeJson
+instance encodeLineJoin :: Encode LineJoin where encode = genericEncode defaultOptions
 
-instance decodeJsonLineJoin :: DecodeJson LineJoin where decodeJson = genericDecodeJson
+instance decodeLineJoin :: Decode LineJoin where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -436,9 +435,9 @@ data LineRasterizer =
 
 derive instance genericLineRasterizer :: Generic LineRasterizer _
 
-instance encodeJsonLineRasterizer :: EncodeJson LineRasterizer where encodeJson = genericEncodeJson
+instance encodeLineRasterizer :: Encode LineRasterizer where encode = genericEncode defaultOptions
 
-instance decodeJsonLineRasterizer :: DecodeJson LineRasterizer where decodeJson = genericDecodeJson
+instance decodeLineRasterizer :: Decode LineRasterizer where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -461,9 +460,9 @@ data HaloRasterizer =
 
 derive instance genericHaloRasterizer :: Generic HaloRasterizer _
 
-instance encodeJsonHaloRasterizer :: EncodeJson HaloRasterizer where encodeJson = genericEncodeJson
+instance encodeHaloRasterizer :: Encode HaloRasterizer where encode = genericEncode defaultOptions
 
-instance decodeJsonHaloRasterizer :: DecodeJson HaloRasterizer where decodeJson = genericDecodeJson
+instance decodeHaloRasterizer :: Decode HaloRasterizer where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -486,9 +485,9 @@ data PointPlacement =
 
 derive instance genericPointPlacement :: Generic PointPlacement _
 
-instance encodeJsonPointPlacement :: EncodeJson PointPlacement where encodeJson = genericEncodeJson
+instance encodePointPlacement :: Encode PointPlacement where encode = genericEncode defaultOptions
 
-instance decodeJsonPointPlacement :: DecodeJson PointPlacement where decodeJson = genericDecodeJson
+instance decodePointPlacement :: Decode PointPlacement where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -511,9 +510,9 @@ data PatternAlignment =
 
 derive instance genericPatternAlignment :: Generic PatternAlignment _
 
-instance encodeJsonPatternAlignment :: EncodeJson PatternAlignment where encodeJson = genericEncodeJson
+instance encodePatternAlignment :: Encode PatternAlignment where encode = genericEncode defaultOptions
 
-instance decodeJsonPatternAlignment :: DecodeJson PatternAlignment where decodeJson = genericDecodeJson
+instance decodePatternAlignment :: Decode PatternAlignment where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -537,9 +536,9 @@ data DebugMode =
 
 derive instance genericDebugMode :: Generic DebugMode _
 
-instance encodeJsonDebugMode :: EncodeJson DebugMode where encodeJson = genericEncodeJson
+instance encodeDebugMode :: Encode DebugMode where encode = genericEncode defaultOptions
 
-instance decodeJsonDebugMode :: DecodeJson DebugMode where decodeJson = genericDecodeJson
+instance decodeDebugMode :: Decode DebugMode where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -571,9 +570,9 @@ data MarkerPlacement =
 
 derive instance genericMarkerPlacement :: Generic MarkerPlacement _
 
-instance encodeJsonMarkerPlacement :: EncodeJson MarkerPlacement where encodeJson = genericEncodeJson
+instance encodeMarkerPlacement :: Encode MarkerPlacement where encode = genericEncode defaultOptions
 
-instance decodeJsonMarkerPlacement :: DecodeJson MarkerPlacement where decodeJson = genericDecodeJson
+instance decodeMarkerPlacement :: Decode MarkerPlacement where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -615,9 +614,9 @@ data MarkerMultiPolicy =
 
 derive instance genericMarkerMultiPolicy :: Generic MarkerMultiPolicy _
 
-instance encodeJsonMarkerMultiPolicy :: EncodeJson MarkerMultiPolicy where encodeJson = genericEncodeJson
+instance encodeMarkerMultiPolicy :: Encode MarkerMultiPolicy where encode = genericEncode defaultOptions
 
-instance decodeJsonMarkerMultiPolicy :: DecodeJson MarkerMultiPolicy where decodeJson = genericDecodeJson
+instance decodeMarkerMultiPolicy :: Decode MarkerMultiPolicy where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -649,9 +648,9 @@ data TextTransform =
 
 derive instance genericTextTransform :: Generic TextTransform _
 
-instance encodeJsonTextTransform :: EncodeJson TextTransform where encodeJson = genericEncodeJson
+instance encodeTextTransform :: Encode TextTransform where encode = genericEncode defaultOptions
 
-instance decodeJsonTextTransform :: DecodeJson TextTransform where decodeJson = genericDecodeJson
+instance decodeTextTransform :: Decode TextTransform where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -694,9 +693,9 @@ data LabelPlacement =
 
 derive instance genericLabelPlacement :: Generic LabelPlacement _
 
-instance encodeJsonLabelPlacement :: EncodeJson LabelPlacement where encodeJson = genericEncodeJson
+instance encodeLabelPlacement :: Encode LabelPlacement where encode = genericEncode defaultOptions
 
-instance decodeJsonLabelPlacement :: DecodeJson LabelPlacement where decodeJson = genericDecodeJson
+instance decodeLabelPlacement :: Decode LabelPlacement where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -733,9 +732,9 @@ data VerticalAlignment =
 
 derive instance genericVerticalAlignment :: Generic VerticalAlignment _
 
-instance encodeJsonVerticalAlignment :: EncodeJson VerticalAlignment where encodeJson = genericEncodeJson
+instance encodeVerticalAlignment :: Encode VerticalAlignment where encode = genericEncode defaultOptions
 
-instance decodeJsonVerticalAlignment :: DecodeJson VerticalAlignment where decodeJson = genericDecodeJson
+instance decodeVerticalAlignment :: Decode VerticalAlignment where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -773,9 +772,9 @@ data HorizontalAlignment =
 
 derive instance genericHorizontalAlignment :: Generic HorizontalAlignment _
 
-instance encodeJsonHorizontalAlignment :: EncodeJson HorizontalAlignment where encodeJson = genericEncodeJson
+instance encodeHorizontalAlignment :: Encode HorizontalAlignment where encode = genericEncode defaultOptions
 
-instance decodeJsonHorizontalAlignment :: DecodeJson HorizontalAlignment where decodeJson = genericDecodeJson
+instance decodeHorizontalAlignment :: Decode HorizontalAlignment where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -818,9 +817,9 @@ data JustifyAlignment =
 
 derive instance genericJustifyAlignment :: Generic JustifyAlignment _
 
-instance encodeJsonJustifyAlignment :: EncodeJson JustifyAlignment where encodeJson = genericEncodeJson
+instance encodeJustifyAlignment :: Encode JustifyAlignment where encode = genericEncode defaultOptions
 
-instance decodeJsonJustifyAlignment :: DecodeJson JustifyAlignment where decodeJson = genericDecodeJson
+instance decodeJustifyAlignment :: Decode JustifyAlignment where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -859,9 +858,9 @@ data Upright =
 
 derive instance genericUpright :: Generic Upright _
 
-instance encodeJsonUpright :: EncodeJson Upright where encodeJson = genericEncodeJson
+instance encodeUpright :: Encode Upright where encode = genericEncode defaultOptions
 
-instance decodeJsonUpright :: DecodeJson Upright where decodeJson = genericDecodeJson
+instance decodeUpright :: Decode Upright where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -914,9 +913,9 @@ data Direction =
 
 derive instance genericDirection :: Generic Direction _
 
-instance encodeJsonDirection :: EncodeJson Direction where encodeJson = genericEncodeJson
+instance encodeDirection :: Encode Direction where encode = genericEncode defaultOptions
 
-instance decodeJsonDirection :: DecodeJson Direction where decodeJson = genericDecodeJson
+instance decodeDirection :: Decode Direction where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -982,9 +981,9 @@ data PlacementDirection =
 
 derive instance genericPlacementDirection :: Generic PlacementDirection _
 
-instance encodeJsonPlacementDirection :: EncodeJson PlacementDirection where encodeJson = genericEncodeJson
+instance encodePlacementDirection :: Encode PlacementDirection where encode = genericEncode defaultOptions
 
-instance decodeJsonPlacementDirection :: DecodeJson PlacementDirection where decodeJson = genericDecodeJson
+instance decodePlacementDirection :: Decode PlacementDirection where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -1052,9 +1051,9 @@ data GammaMethod =
 
 derive instance genericGammaMethod :: Generic GammaMethod _
 
-instance encodeJsonGammaMethod :: EncodeJson GammaMethod where encodeJson = genericEncodeJson
+instance encodeGammaMethod :: Encode GammaMethod where encode = genericEncode defaultOptions
 
-instance decodeJsonGammaMethod :: DecodeJson GammaMethod where decodeJson = genericDecodeJson
+instance decodeGammaMethod :: Decode GammaMethod where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -1097,9 +1096,9 @@ data ColorizerMode =
 
 derive instance genericColorizerMode :: Generic ColorizerMode _
 
-instance encodeJsonColorizerMode :: EncodeJson ColorizerMode where encodeJson = genericEncodeJson
+instance encodeColorizerMode :: Encode ColorizerMode where encode = genericEncode defaultOptions
 
-instance decodeJsonColorizerMode :: DecodeJson ColorizerMode where decodeJson = genericDecodeJson
+instance decodeColorizerMode :: Decode ColorizerMode where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -1149,9 +1148,9 @@ data ScalingMethod =
 
 derive instance genericScalingMethod :: Generic ScalingMethod _
 
-instance encodeJsonScalingMethod :: EncodeJson ScalingMethod where encodeJson = genericEncodeJson
+instance encodeScalingMethod :: Encode ScalingMethod where encode = genericEncode defaultOptions
 
-instance decodeJsonScalingMethod :: DecodeJson ScalingMethod where decodeJson = genericDecodeJson
+instance decodeScalingMethod :: Decode ScalingMethod where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -1266,9 +1265,9 @@ data SimplifyAlgorithm =
 
 derive instance genericSimplifyAlgorithm :: Generic SimplifyAlgorithm _
 
-instance encodeJsonSimplifyAlgorithm :: EncodeJson SimplifyAlgorithm where encodeJson = genericEncodeJson
+instance encodeSimplifyAlgorithm :: Encode SimplifyAlgorithm where encode = genericEncode defaultOptions
 
-instance decodeJsonSimplifyAlgorithm :: DecodeJson SimplifyAlgorithm where decodeJson = genericDecodeJson
+instance decodeSimplifyAlgorithm :: Decode SimplifyAlgorithm where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -1303,9 +1302,9 @@ data FilterMode =
 
 derive instance genericFilterMode :: Generic FilterMode _
 
-instance encodeJsonFilterMode :: EncodeJson FilterMode where encodeJson = genericEncodeJson
+instance encodeFilterMode :: Encode FilterMode where encode = genericEncode defaultOptions
 
-instance decodeJsonFilterMode :: DecodeJson FilterMode where decodeJson = genericDecodeJson
+instance decodeFilterMode :: Decode FilterMode where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------

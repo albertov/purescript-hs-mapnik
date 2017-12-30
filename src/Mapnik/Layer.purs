@@ -12,10 +12,9 @@ import Prim (Array, Boolean, Int, Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 newtype Layer a =
     Layer {
@@ -35,9 +34,9 @@ newtype Layer a =
 
 derive instance genericLayer :: Generic (Layer a) _
 
-instance encodeJsonLayer :: EncodeJson a => EncodeJson (Layer a) where encodeJson = genericEncodeJson
+instance encodeLayer :: Encode a => Encode (Layer a) where encode = genericEncode defaultOptions
 
-instance decodeJsonLayer :: DecodeJson a => DecodeJson (Layer a) where decodeJson = genericDecodeJson
+instance decodeLayer :: Decode a => Decode (Layer a) where decode = genericDecode defaultOptions
 
 derive instance newtypeLayer :: Newtype (Layer a) _
 

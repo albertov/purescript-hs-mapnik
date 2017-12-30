@@ -12,10 +12,9 @@ import Prim (Array, Int, Number)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 data ImageFilter =
     Blur
@@ -37,9 +36,9 @@ data ImageFilter =
 
 derive instance genericImageFilter :: Generic ImageFilter _
 
-instance encodeJsonImageFilter :: EncodeJson ImageFilter where encodeJson = genericEncodeJson
+instance encodeImageFilter :: Encode ImageFilter where encode = genericEncode defaultOptions
 
-instance decodeJsonImageFilter :: DecodeJson ImageFilter where decodeJson = genericDecodeJson
+instance decodeImageFilter :: Decode ImageFilter where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -148,9 +147,9 @@ newtype ColorStop =
 
 derive instance genericColorStop :: Generic ColorStop _
 
-instance encodeJsonColorStop :: EncodeJson ColorStop where encodeJson = genericEncodeJson
+instance encodeColorStop :: Encode ColorStop where encode = genericEncode defaultOptions
 
-instance decodeJsonColorStop :: DecodeJson ColorStop where decodeJson = genericDecodeJson
+instance decodeColorStop :: Decode ColorStop where decode = genericDecode defaultOptions
 
 derive instance newtypeColorStop :: Newtype ColorStop _
 

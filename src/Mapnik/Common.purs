@@ -11,19 +11,18 @@ import Prim (Number, String)
 
 import Prelude
 import Data.Generic.Rep (class Generic)
-import Data.Argonaut.Encode.Class (class EncodeJson, encodeJson)
-import Data.Argonaut.Decode.Class (class DecodeJson, decodeJson)
-import Data.Argonaut.Encode.Generic.Rep (genericEncodeJson)
-import Data.Argonaut.Decode.Generic.Rep (genericDecodeJson)
+import Data.Foreign.Class (class Decode, class Encode, decode, encode)
+import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
 
 newtype Expression =
     Expression String
 
 derive instance genericExpression :: Generic Expression _
 
-instance encodeJsonExpression :: EncodeJson Expression where encodeJson = genericEncodeJson
+instance encodeExpression :: Encode Expression where encode = genericEncode defaultOptions
 
-instance decodeJsonExpression :: DecodeJson Expression where decodeJson = genericDecodeJson
+instance decodeExpression :: Decode Expression where decode = genericDecode defaultOptions
 
 derive instance newtypeExpression :: Newtype Expression _
 
@@ -37,9 +36,9 @@ newtype PathExpression =
 
 derive instance genericPathExpression :: Generic PathExpression _
 
-instance encodeJsonPathExpression :: EncodeJson PathExpression where encodeJson = genericEncodeJson
+instance encodePathExpression :: Encode PathExpression where encode = genericEncode defaultOptions
 
-instance decodeJsonPathExpression :: DecodeJson PathExpression where decodeJson = genericDecodeJson
+instance decodePathExpression :: Decode PathExpression where decode = genericDecode defaultOptions
 
 derive instance newtypePathExpression :: Newtype PathExpression _
 
@@ -53,9 +52,9 @@ newtype Transform =
 
 derive instance genericTransform :: Generic Transform _
 
-instance encodeJsonTransform :: EncodeJson Transform where encodeJson = genericEncodeJson
+instance encodeTransform :: Encode Transform where encode = genericEncode defaultOptions
 
-instance decodeJsonTransform :: DecodeJson Transform where decodeJson = genericDecodeJson
+instance decodeTransform :: Decode Transform where decode = genericDecode defaultOptions
 
 derive instance newtypeTransform :: Newtype Transform _
 
@@ -74,9 +73,9 @@ newtype Box =
 
 derive instance genericBox :: Generic Box _
 
-instance encodeJsonBox :: EncodeJson Box where encodeJson = genericEncodeJson
+instance encodeBox :: Encode Box where encode = genericEncode defaultOptions
 
-instance decodeJsonBox :: DecodeJson Box where decodeJson = genericDecodeJson
+instance decodeBox :: Decode Box where decode = genericDecode defaultOptions
 
 derive instance newtypeBox :: Newtype Box _
 
@@ -91,9 +90,9 @@ data Dash =
 
 derive instance genericDash :: Generic Dash _
 
-instance encodeJsonDash :: EncodeJson Dash where encodeJson = genericEncodeJson
+instance encodeDash :: Encode Dash where encode = genericEncode defaultOptions
 
-instance decodeJsonDash :: DecodeJson Dash where decodeJson = genericDecodeJson
+instance decodeDash :: Decode Dash where decode = genericDecode defaultOptions
 
 
 --------------------------------------------------------------------------------
@@ -108,9 +107,9 @@ newtype FontFeatureSettings =
 
 derive instance genericFontFeatureSettings :: Generic FontFeatureSettings _
 
-instance encodeJsonFontFeatureSettings :: EncodeJson FontFeatureSettings where encodeJson = genericEncodeJson
+instance encodeFontFeatureSettings :: Encode FontFeatureSettings where encode = genericEncode defaultOptions
 
-instance decodeJsonFontFeatureSettings :: DecodeJson FontFeatureSettings where decodeJson = genericDecodeJson
+instance decodeFontFeatureSettings :: Decode FontFeatureSettings where decode = genericDecode defaultOptions
 
 derive instance newtypeFontFeatureSettings :: Newtype FontFeatureSettings _
 
