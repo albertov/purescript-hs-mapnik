@@ -13,8 +13,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 data Value =
     TextValue String
   | DoubleValue Number
@@ -24,9 +28,13 @@ data Value =
 
 derive instance genericValue :: Generic Value _
 
-instance encodeValue :: Encode Value where encode = genericEncode defaultOptions
+instance encodeValue :: Encode Value where encode = genericEncode jOpts
 
-instance decodeValue :: Decode Value where decode = genericDecode defaultOptions
+instance decodeValue :: Decode Value where decode = genericDecode jOpts
+
+instance showValue :: Show Value where show = GShow.genericShow
+
+instance eqValue :: Eq Value where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------

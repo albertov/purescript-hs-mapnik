@@ -16,8 +16,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Style =
     Style {
       opacity :: Maybe Number
@@ -31,9 +35,13 @@ newtype Style =
 
 derive instance genericStyle :: Generic Style _
 
-instance encodeStyle :: Encode Style where encode = genericEncode defaultOptions
+instance encodeStyle :: Encode Style where encode = genericEncode jOpts
 
-instance decodeStyle :: Decode Style where decode = genericDecode defaultOptions
+instance decodeStyle :: Decode Style where decode = genericDecode jOpts
+
+instance showStyle :: Show Style where show = GShow.genericShow
+
+instance eqStyle :: Eq Style where eq = GEq.genericEq
 
 derive instance newtypeStyle :: Newtype Style _
 

@@ -1,9 +1,9 @@
 diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
---- src/Mapnik/Symbolizer.purs	2017-12-30 12:02:56.990300307 +0100
-+++ src.modified/Mapnik/Symbolizer.purs	2017-12-30 12:02:29.474137807 +0100
-@@ -18,6 +18,14 @@
- import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
- import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+--- src/Mapnik/Symbolizer.purs	2018-01-01 18:00:48.235409935 +0100
++++ src.modified/Mapnik/Symbolizer.purs	2018-01-01 18:00:14.781254014 +0100
+@@ -21,6 +21,14 @@
+ import Data.Generic.Rep.Eq as GEq
+ import Data.Generic.Rep.Show as GShow
  
 +import Data.Array (head)
 +import Data.Maybe (maybe)
@@ -13,16 +13,20 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +import Data.StrMap as SM
 +import Data.Traversable (traverse)
 +
+ jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
  data Symbolizer =
      PointSymbolizer {
-       file :: Maybe PathExpression
-@@ -446,9 +454,22 @@
+@@ -478,13 +486,34 @@
  
  derive instance genericGroupRule :: Generic GroupRule _
  
--instance encodeGroupRule :: Encode GroupRule where encode = genericEncode defaultOptions
+-instance encodeGroupRule :: Encode GroupRule where encode = genericEncode jOpts
 -
--instance decodeGroupRule :: Decode GroupRule where decode = genericDecode defaultOptions
+-instance decodeGroupRule :: Decode GroupRule where decode = genericDecode jOpts
+-
+-instance showGroupRule :: Show GroupRule where show = GShow.genericShow
+-
+-instance eqGroupRule :: Eq GroupRule where eq = GEq.genericEq
 +instance encodeGroupRule :: Encode GroupRule where
 +  encode (GroupRule x) = toForeign
 +    $ SM.insert "symbolizers" (toForeign (encode <$> x.symbolizers))
@@ -39,17 +43,32 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +    pure (GroupRule {symbolizers,filter,repeatKey})
 +    where
 +      error = throwError $ NEL.singleton $ ForeignError "Expected field 'symbolizers'"
++
++instance showGroupRule :: Show GroupRule where
++  show (GroupRule r) = ("GroupRule { symbolizers: "
++                    <> show r.symbolizers
++                    <> ", filter: " <> show r.filter
++                    <> ", repeatKey: " <> show r.repeatKey
++                    <> "}")
++
++instance eqGroupRule :: Eq GroupRule where
++  eq (GroupRule a) (GroupRule b) = a.symbolizers `eq` b.symbolizers &&
++                                   a.filter      `eq` b.filter &&
++                                   a.repeatKey   `eq` b.repeatKey
  
  derive instance newtypeGroupRule :: Newtype GroupRule _
  
-@@ -585,10 +606,65 @@
+@@ -633,13 +662,151 @@
  
  derive instance genericFormat :: Generic Format _
  
--instance encodeFormat :: Encode Format where encode = genericEncode defaultOptions
+-instance encodeFormat :: Encode Format where encode = genericEncode jOpts
 -
--instance decodeFormat :: Decode Format where decode = genericDecode defaultOptions
+-instance decodeFormat :: Decode Format where decode = genericDecode jOpts
 -
+-instance showFormat :: Show Format where show = GShow.genericShow
+-
+-instance eqFormat :: Eq Format where eq = GEq.genericEq
 +instance encodeFormat :: Encode Format where
 +  encode (FormatExp e) = toForeign $ SM.insert "FormatExp" (encode e) $ SM.empty
 +  encode (FormatList xs) = toForeign $ SM.insert "FormatList" o $ SM.empty
@@ -57,10 +76,34 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +  encode (Format f) = toForeign $ SM.insert "Format" o $ SM.empty
 +    where o = toForeign
 +            $ SM.insert "font" (encode f.font)
++            $ SM.insert "textSize" (encode f.textSize)
++            $ SM.insert "opacity" (encode f.opacity)
++            $ SM.insert "characterSpacing" (encode f.characterSpacing)
++            $ SM.insert "lineSpacing" (encode f.lineSpacing)
++            $ SM.insert "wrapBefore" (encode f.wrapBefore)
++            $ SM.insert "repeatWrapChar" (encode f.repeatWrapChar)
++            $ SM.insert "textTransform" (encode f.textTransform)
++            $ SM.insert "fill" (encode f.fill)
++            $ SM.insert "haloFill" (encode f.haloFill)
++            $ SM.insert "haloRadius" (encode f.haloRadius)
++            $ SM.insert "ffSettings" (encode f.ffSettings)
++            $ SM.insert "next" (encode f.next)
 +            $ SM.empty
 +  encode (FormatLayout f) = toForeign $ SM.insert "FormatLayout" o $ SM.empty
 +    where o = toForeign
 +            $ SM.insert "dx" (encode f.dx)
++            $ SM.insert "dy" (encode f.dy)
++            $ SM.insert "orientation" (encode f.orientation)
++            $ SM.insert "textRatio" (encode f.textRatio)
++            $ SM.insert "wrapWidth" (encode f.wrapWidth)
++            $ SM.insert "wrapChar" (encode f.wrapChar)
++            $ SM.insert "wrapBefore" (encode f.wrapBefore)
++            $ SM.insert "repeatWrapChar" (encode f.repeatWrapChar)
++            $ SM.insert "rotateDisplacement" (encode f.rotateDisplacement)
++            $ SM.insert "horizontalAlignment" (encode f.horizontalAlignment)
++            $ SM.insert "justifyAlignment" (encode f.justifyAlignment)
++            $ SM.insert "verticalAlignment" (encode f.verticalAlignment)
++            $ SM.insert "next" (encode f.next)
 +            $ SM.empty
 +  encode NullFormat = toForeign $ SM.insert "NullFormat" o $ SM.empty
 +    where o = toForeign []
@@ -108,7 +151,69 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +
 +      error = throwError $ NEL.singleton $ ForeignError "Expected 'next' key"
 +      invalid = throwError $ NEL.singleton $ ForeignError "Invalid Format"
-+      
++
++instance showFormat :: Show Format where
++  show (FormatExp e) = "FormatExp " <> show e
++  show (FormatList e) = "FormatList " <> show e
++  show (FormatList e) = "FormatList " <> show e
++  show (Format f) = "Format { "
++                 <> "font: " <> show f.font <> ", "
++                 <> "textSize: " <> show f.textSize <> ", "
++                 <> "opacity: " <> show f.opacity <> ", "
++                 <> "characterSpacing: " <> show f.characterSpacing <> ", "
++                 <> "lineSpacing: " <> show f.lineSpacing <> ", "
++                 <> "wrapBefore: " <> show f.wrapBefore <> ", "
++                 <> "repeatWrapChar: " <> show f.repeatWrapChar <> ", "
++                 <> "textTransform: " <> show f.textTransform <> ", "
++                 <> "fill: " <> show f.fill <> ", "
++                 <> "haloFill: " <> show f.haloFill <> ", "
++                 <> "ffSettings: " <> show f.ffSettings <> ", "
++                 <> "next: " <> show f.next <> "}"
++  show (FormatLayout f) = "FormatLayout { "
++                 <> "dx: " <> show f.dx <> ", "
++                 <> "dy: " <> show f.dy <> ", "
++                 <> "orientation: " <> show f.orientation <> ", "
++                 <> "textRatio: " <> show f.textRatio <> ", "
++                 <> "wrapWidth: " <> show f.wrapWidth <> ", "
++                 <> "wrapChar: " <> show f.wrapChar <> ", "
++                 <> "wrapBefore: " <> show f.wrapBefore <> ", "
++                 <> "repeatWrapChar: " <> show f.repeatWrapChar <> ", "
++                 <> "horizontalAlignment: " <> show f.horizontalAlignment <> ", "
++                 <> "justifyAlignment: " <> show f.justifyAlignment <> ", "
++                 <> "verticalAlignment: " <> show f.verticalAlignment <> ", "
++                 <> "next: " <> show f.next <> "}"
++  show NullFormat = "NullFormat"
++
++instance eqFormat :: Eq Format where
++  eq (FormatExp a) (FormatExp b) = eq a b
++  eq (FormatList a) (FormatList b) = eq a b
++  eq (Format a) (Format b) = eq a.font b.font
++                          && eq a.textSize b.textSize
++                          && eq a.opacity b.opacity
++                          && eq a.lineSpacing b.lineSpacing
++                          && eq a.wrapBefore b.wrapBefore
++                          && eq a.repeatWrapChar b.repeatWrapChar
++                          && eq a.textTransform b.textTransform
++                          && eq a.fill b.fill
++                          && eq a.haloFill b.haloFill
++                          && eq a.haloRadius b.haloRadius
++                          && eq a.ffSettings b.ffSettings
++                          && eq a.next b.next
++  eq (FormatLayout a) (FormatLayout b) = eq a.dx b.dx
++                                      && eq a.dy b.dy
++                                      && eq a.orientation b.orientation
++                                      && eq a.textRatio b.textRatio
++                                      && eq a.wrapWidth b.wrapWidth
++                                      && eq a.wrapChar b.wrapChar
++                                      && eq a.wrapBefore b.wrapBefore
++                                      && eq a.repeatWrapChar b.repeatWrapChar
++                                      && eq a.rotateDisplacement b.rotateDisplacement
++                                      && eq a.horizontalAlignment b.horizontalAlignment
++                                      && eq a.justifyAlignment b.justifyAlignment
++                                      && eq a.verticalAlignment b.verticalAlignment
++                                      && eq a.next b.next
++  eq NullFormat NullFormat = true
++  eq _ _ = false
+ 
  
  --------------------------------------------------------------------------------
- _FormatExp :: Prism' Format Expression

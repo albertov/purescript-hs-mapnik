@@ -12,8 +12,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 data CompositeMode =
     Clear
   | Src
@@ -55,9 +59,13 @@ data CompositeMode =
 
 derive instance genericCompositeMode :: Generic CompositeMode _
 
-instance encodeCompositeMode :: Encode CompositeMode where encode = genericEncode defaultOptions
+instance encodeCompositeMode :: Encode CompositeMode where encode = genericEncode jOpts
 
-instance decodeCompositeMode :: Decode CompositeMode where decode = genericDecode defaultOptions
+instance decodeCompositeMode :: Decode CompositeMode where decode = genericDecode jOpts
+
+instance showCompositeMode :: Show CompositeMode where show = GShow.genericShow
+
+instance eqCompositeMode :: Eq CompositeMode where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -297,9 +305,13 @@ data AspectFixMode =
 
 derive instance genericAspectFixMode :: Generic AspectFixMode _
 
-instance encodeAspectFixMode :: Encode AspectFixMode where encode = genericEncode defaultOptions
+instance encodeAspectFixMode :: Encode AspectFixMode where encode = genericEncode jOpts
 
-instance decodeAspectFixMode :: Decode AspectFixMode where decode = genericDecode defaultOptions
+instance decodeAspectFixMode :: Decode AspectFixMode where decode = genericDecode jOpts
+
+instance showAspectFixMode :: Show AspectFixMode where show = GShow.genericShow
+
+instance eqAspectFixMode :: Eq AspectFixMode where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -365,9 +377,13 @@ data LineCap =
 
 derive instance genericLineCap :: Generic LineCap _
 
-instance encodeLineCap :: Encode LineCap where encode = genericEncode defaultOptions
+instance encodeLineCap :: Encode LineCap where encode = genericEncode jOpts
 
-instance decodeLineCap :: Decode LineCap where decode = genericDecode defaultOptions
+instance decodeLineCap :: Decode LineCap where decode = genericDecode jOpts
+
+instance showLineCap :: Show LineCap where show = GShow.genericShow
+
+instance eqLineCap :: Eq LineCap where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -398,9 +414,13 @@ data LineJoin =
 
 derive instance genericLineJoin :: Generic LineJoin _
 
-instance encodeLineJoin :: Encode LineJoin where encode = genericEncode defaultOptions
+instance encodeLineJoin :: Encode LineJoin where encode = genericEncode jOpts
 
-instance decodeLineJoin :: Decode LineJoin where decode = genericDecode defaultOptions
+instance decodeLineJoin :: Decode LineJoin where decode = genericDecode jOpts
+
+instance showLineJoin :: Show LineJoin where show = GShow.genericShow
+
+instance eqLineJoin :: Eq LineJoin where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -435,9 +455,13 @@ data LineRasterizer =
 
 derive instance genericLineRasterizer :: Generic LineRasterizer _
 
-instance encodeLineRasterizer :: Encode LineRasterizer where encode = genericEncode defaultOptions
+instance encodeLineRasterizer :: Encode LineRasterizer where encode = genericEncode jOpts
 
-instance decodeLineRasterizer :: Decode LineRasterizer where decode = genericDecode defaultOptions
+instance decodeLineRasterizer :: Decode LineRasterizer where decode = genericDecode jOpts
+
+instance showLineRasterizer :: Show LineRasterizer where show = GShow.genericShow
+
+instance eqLineRasterizer :: Eq LineRasterizer where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -460,9 +484,13 @@ data HaloRasterizer =
 
 derive instance genericHaloRasterizer :: Generic HaloRasterizer _
 
-instance encodeHaloRasterizer :: Encode HaloRasterizer where encode = genericEncode defaultOptions
+instance encodeHaloRasterizer :: Encode HaloRasterizer where encode = genericEncode jOpts
 
-instance decodeHaloRasterizer :: Decode HaloRasterizer where decode = genericDecode defaultOptions
+instance decodeHaloRasterizer :: Decode HaloRasterizer where decode = genericDecode jOpts
+
+instance showHaloRasterizer :: Show HaloRasterizer where show = GShow.genericShow
+
+instance eqHaloRasterizer :: Eq HaloRasterizer where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -485,9 +513,13 @@ data PointPlacement =
 
 derive instance genericPointPlacement :: Generic PointPlacement _
 
-instance encodePointPlacement :: Encode PointPlacement where encode = genericEncode defaultOptions
+instance encodePointPlacement :: Encode PointPlacement where encode = genericEncode jOpts
 
-instance decodePointPlacement :: Decode PointPlacement where decode = genericDecode defaultOptions
+instance decodePointPlacement :: Decode PointPlacement where decode = genericDecode jOpts
+
+instance showPointPlacement :: Show PointPlacement where show = GShow.genericShow
+
+instance eqPointPlacement :: Eq PointPlacement where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -510,9 +542,13 @@ data PatternAlignment =
 
 derive instance genericPatternAlignment :: Generic PatternAlignment _
 
-instance encodePatternAlignment :: Encode PatternAlignment where encode = genericEncode defaultOptions
+instance encodePatternAlignment :: Encode PatternAlignment where encode = genericEncode jOpts
 
-instance decodePatternAlignment :: Decode PatternAlignment where decode = genericDecode defaultOptions
+instance decodePatternAlignment :: Decode PatternAlignment where decode = genericDecode jOpts
+
+instance showPatternAlignment :: Show PatternAlignment where show = GShow.genericShow
+
+instance eqPatternAlignment :: Eq PatternAlignment where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -536,9 +572,13 @@ data DebugMode =
 
 derive instance genericDebugMode :: Generic DebugMode _
 
-instance encodeDebugMode :: Encode DebugMode where encode = genericEncode defaultOptions
+instance encodeDebugMode :: Encode DebugMode where encode = genericEncode jOpts
 
-instance decodeDebugMode :: Decode DebugMode where decode = genericDecode defaultOptions
+instance decodeDebugMode :: Decode DebugMode where decode = genericDecode jOpts
+
+instance showDebugMode :: Show DebugMode where show = GShow.genericShow
+
+instance eqDebugMode :: Eq DebugMode where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -570,9 +610,13 @@ data MarkerPlacement =
 
 derive instance genericMarkerPlacement :: Generic MarkerPlacement _
 
-instance encodeMarkerPlacement :: Encode MarkerPlacement where encode = genericEncode defaultOptions
+instance encodeMarkerPlacement :: Encode MarkerPlacement where encode = genericEncode jOpts
 
-instance decodeMarkerPlacement :: Decode MarkerPlacement where decode = genericDecode defaultOptions
+instance decodeMarkerPlacement :: Decode MarkerPlacement where decode = genericDecode jOpts
+
+instance showMarkerPlacement :: Show MarkerPlacement where show = GShow.genericShow
+
+instance eqMarkerPlacement :: Eq MarkerPlacement where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -614,9 +658,13 @@ data MarkerMultiPolicy =
 
 derive instance genericMarkerMultiPolicy :: Generic MarkerMultiPolicy _
 
-instance encodeMarkerMultiPolicy :: Encode MarkerMultiPolicy where encode = genericEncode defaultOptions
+instance encodeMarkerMultiPolicy :: Encode MarkerMultiPolicy where encode = genericEncode jOpts
 
-instance decodeMarkerMultiPolicy :: Decode MarkerMultiPolicy where decode = genericDecode defaultOptions
+instance decodeMarkerMultiPolicy :: Decode MarkerMultiPolicy where decode = genericDecode jOpts
+
+instance showMarkerMultiPolicy :: Show MarkerMultiPolicy where show = GShow.genericShow
+
+instance eqMarkerMultiPolicy :: Eq MarkerMultiPolicy where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -648,9 +696,13 @@ data TextTransform =
 
 derive instance genericTextTransform :: Generic TextTransform _
 
-instance encodeTextTransform :: Encode TextTransform where encode = genericEncode defaultOptions
+instance encodeTextTransform :: Encode TextTransform where encode = genericEncode jOpts
 
-instance decodeTextTransform :: Decode TextTransform where decode = genericDecode defaultOptions
+instance decodeTextTransform :: Decode TextTransform where decode = genericDecode jOpts
+
+instance showTextTransform :: Show TextTransform where show = GShow.genericShow
+
+instance eqTextTransform :: Eq TextTransform where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -693,9 +745,13 @@ data LabelPlacement =
 
 derive instance genericLabelPlacement :: Generic LabelPlacement _
 
-instance encodeLabelPlacement :: Encode LabelPlacement where encode = genericEncode defaultOptions
+instance encodeLabelPlacement :: Encode LabelPlacement where encode = genericEncode jOpts
 
-instance decodeLabelPlacement :: Decode LabelPlacement where decode = genericDecode defaultOptions
+instance decodeLabelPlacement :: Decode LabelPlacement where decode = genericDecode jOpts
+
+instance showLabelPlacement :: Show LabelPlacement where show = GShow.genericShow
+
+instance eqLabelPlacement :: Eq LabelPlacement where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -732,9 +788,13 @@ data VerticalAlignment =
 
 derive instance genericVerticalAlignment :: Generic VerticalAlignment _
 
-instance encodeVerticalAlignment :: Encode VerticalAlignment where encode = genericEncode defaultOptions
+instance encodeVerticalAlignment :: Encode VerticalAlignment where encode = genericEncode jOpts
 
-instance decodeVerticalAlignment :: Decode VerticalAlignment where decode = genericDecode defaultOptions
+instance decodeVerticalAlignment :: Decode VerticalAlignment where decode = genericDecode jOpts
+
+instance showVerticalAlignment :: Show VerticalAlignment where show = GShow.genericShow
+
+instance eqVerticalAlignment :: Eq VerticalAlignment where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -772,9 +832,13 @@ data HorizontalAlignment =
 
 derive instance genericHorizontalAlignment :: Generic HorizontalAlignment _
 
-instance encodeHorizontalAlignment :: Encode HorizontalAlignment where encode = genericEncode defaultOptions
+instance encodeHorizontalAlignment :: Encode HorizontalAlignment where encode = genericEncode jOpts
 
-instance decodeHorizontalAlignment :: Decode HorizontalAlignment where decode = genericDecode defaultOptions
+instance decodeHorizontalAlignment :: Decode HorizontalAlignment where decode = genericDecode jOpts
+
+instance showHorizontalAlignment :: Show HorizontalAlignment where show = GShow.genericShow
+
+instance eqHorizontalAlignment :: Eq HorizontalAlignment where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -817,9 +881,13 @@ data JustifyAlignment =
 
 derive instance genericJustifyAlignment :: Generic JustifyAlignment _
 
-instance encodeJustifyAlignment :: Encode JustifyAlignment where encode = genericEncode defaultOptions
+instance encodeJustifyAlignment :: Encode JustifyAlignment where encode = genericEncode jOpts
 
-instance decodeJustifyAlignment :: Decode JustifyAlignment where decode = genericDecode defaultOptions
+instance decodeJustifyAlignment :: Decode JustifyAlignment where decode = genericDecode jOpts
+
+instance showJustifyAlignment :: Show JustifyAlignment where show = GShow.genericShow
+
+instance eqJustifyAlignment :: Eq JustifyAlignment where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -858,9 +926,13 @@ data Upright =
 
 derive instance genericUpright :: Generic Upright _
 
-instance encodeUpright :: Encode Upright where encode = genericEncode defaultOptions
+instance encodeUpright :: Encode Upright where encode = genericEncode jOpts
 
-instance decodeUpright :: Decode Upright where decode = genericDecode defaultOptions
+instance decodeUpright :: Decode Upright where decode = genericDecode jOpts
+
+instance showUpright :: Show Upright where show = GShow.genericShow
+
+instance eqUpright :: Eq Upright where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -913,9 +985,13 @@ data Direction =
 
 derive instance genericDirection :: Generic Direction _
 
-instance encodeDirection :: Encode Direction where encode = genericEncode defaultOptions
+instance encodeDirection :: Encode Direction where encode = genericEncode jOpts
 
-instance decodeDirection :: Decode Direction where decode = genericDecode defaultOptions
+instance decodeDirection :: Decode Direction where decode = genericDecode jOpts
+
+instance showDirection :: Show Direction where show = GShow.genericShow
+
+instance eqDirection :: Eq Direction where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -981,9 +1057,13 @@ data PlacementDirection =
 
 derive instance genericPlacementDirection :: Generic PlacementDirection _
 
-instance encodePlacementDirection :: Encode PlacementDirection where encode = genericEncode defaultOptions
+instance encodePlacementDirection :: Encode PlacementDirection where encode = genericEncode jOpts
 
-instance decodePlacementDirection :: Decode PlacementDirection where decode = genericDecode defaultOptions
+instance decodePlacementDirection :: Decode PlacementDirection where decode = genericDecode jOpts
+
+instance showPlacementDirection :: Show PlacementDirection where show = GShow.genericShow
+
+instance eqPlacementDirection :: Eq PlacementDirection where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -1051,9 +1131,13 @@ data GammaMethod =
 
 derive instance genericGammaMethod :: Generic GammaMethod _
 
-instance encodeGammaMethod :: Encode GammaMethod where encode = genericEncode defaultOptions
+instance encodeGammaMethod :: Encode GammaMethod where encode = genericEncode jOpts
 
-instance decodeGammaMethod :: Decode GammaMethod where decode = genericDecode defaultOptions
+instance decodeGammaMethod :: Decode GammaMethod where decode = genericDecode jOpts
+
+instance showGammaMethod :: Show GammaMethod where show = GShow.genericShow
+
+instance eqGammaMethod :: Eq GammaMethod where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -1096,9 +1180,13 @@ data ColorizerMode =
 
 derive instance genericColorizerMode :: Generic ColorizerMode _
 
-instance encodeColorizerMode :: Encode ColorizerMode where encode = genericEncode defaultOptions
+instance encodeColorizerMode :: Encode ColorizerMode where encode = genericEncode jOpts
 
-instance decodeColorizerMode :: Decode ColorizerMode where decode = genericDecode defaultOptions
+instance decodeColorizerMode :: Decode ColorizerMode where decode = genericDecode jOpts
+
+instance showColorizerMode :: Show ColorizerMode where show = GShow.genericShow
+
+instance eqColorizerMode :: Eq ColorizerMode where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -1148,9 +1236,13 @@ data ScalingMethod =
 
 derive instance genericScalingMethod :: Generic ScalingMethod _
 
-instance encodeScalingMethod :: Encode ScalingMethod where encode = genericEncode defaultOptions
+instance encodeScalingMethod :: Encode ScalingMethod where encode = genericEncode jOpts
 
-instance decodeScalingMethod :: Decode ScalingMethod where decode = genericDecode defaultOptions
+instance decodeScalingMethod :: Decode ScalingMethod where decode = genericDecode jOpts
+
+instance showScalingMethod :: Show ScalingMethod where show = GShow.genericShow
+
+instance eqScalingMethod :: Eq ScalingMethod where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -1265,9 +1357,13 @@ data SimplifyAlgorithm =
 
 derive instance genericSimplifyAlgorithm :: Generic SimplifyAlgorithm _
 
-instance encodeSimplifyAlgorithm :: Encode SimplifyAlgorithm where encode = genericEncode defaultOptions
+instance encodeSimplifyAlgorithm :: Encode SimplifyAlgorithm where encode = genericEncode jOpts
 
-instance decodeSimplifyAlgorithm :: Decode SimplifyAlgorithm where decode = genericDecode defaultOptions
+instance decodeSimplifyAlgorithm :: Decode SimplifyAlgorithm where decode = genericDecode jOpts
+
+instance showSimplifyAlgorithm :: Show SimplifyAlgorithm where show = GShow.genericShow
+
+instance eqSimplifyAlgorithm :: Eq SimplifyAlgorithm where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -1302,9 +1398,13 @@ data FilterMode =
 
 derive instance genericFilterMode :: Generic FilterMode _
 
-instance encodeFilterMode :: Encode FilterMode where encode = genericEncode defaultOptions
+instance encodeFilterMode :: Encode FilterMode where encode = genericEncode jOpts
 
-instance decodeFilterMode :: Decode FilterMode where decode = genericDecode defaultOptions
+instance decodeFilterMode :: Decode FilterMode where decode = genericDecode jOpts
+
+instance showFilterMode :: Show FilterMode where show = GShow.genericShow
+
+instance eqFilterMode :: Eq FilterMode where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------

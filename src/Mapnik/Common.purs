@@ -13,16 +13,24 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Expression =
     Expression String
 
 derive instance genericExpression :: Generic Expression _
 
-instance encodeExpression :: Encode Expression where encode = genericEncode defaultOptions
+instance encodeExpression :: Encode Expression where encode = genericEncode jOpts
 
-instance decodeExpression :: Decode Expression where decode = genericDecode defaultOptions
+instance decodeExpression :: Decode Expression where decode = genericDecode jOpts
+
+instance showExpression :: Show Expression where show = GShow.genericShow
+
+instance eqExpression :: Eq Expression where eq = GEq.genericEq
 
 derive instance newtypeExpression :: Newtype Expression _
 
@@ -36,9 +44,13 @@ newtype PathExpression =
 
 derive instance genericPathExpression :: Generic PathExpression _
 
-instance encodePathExpression :: Encode PathExpression where encode = genericEncode defaultOptions
+instance encodePathExpression :: Encode PathExpression where encode = genericEncode jOpts
 
-instance decodePathExpression :: Decode PathExpression where decode = genericDecode defaultOptions
+instance decodePathExpression :: Decode PathExpression where decode = genericDecode jOpts
+
+instance showPathExpression :: Show PathExpression where show = GShow.genericShow
+
+instance eqPathExpression :: Eq PathExpression where eq = GEq.genericEq
 
 derive instance newtypePathExpression :: Newtype PathExpression _
 
@@ -52,9 +64,13 @@ newtype Transform =
 
 derive instance genericTransform :: Generic Transform _
 
-instance encodeTransform :: Encode Transform where encode = genericEncode defaultOptions
+instance encodeTransform :: Encode Transform where encode = genericEncode jOpts
 
-instance decodeTransform :: Decode Transform where decode = genericDecode defaultOptions
+instance decodeTransform :: Decode Transform where decode = genericDecode jOpts
+
+instance showTransform :: Show Transform where show = GShow.genericShow
+
+instance eqTransform :: Eq Transform where eq = GEq.genericEq
 
 derive instance newtypeTransform :: Newtype Transform _
 
@@ -73,9 +89,13 @@ newtype Box =
 
 derive instance genericBox :: Generic Box _
 
-instance encodeBox :: Encode Box where encode = genericEncode defaultOptions
+instance encodeBox :: Encode Box where encode = genericEncode jOpts
 
-instance decodeBox :: Decode Box where decode = genericDecode defaultOptions
+instance decodeBox :: Decode Box where decode = genericDecode jOpts
+
+instance showBox :: Show Box where show = GShow.genericShow
+
+instance eqBox :: Eq Box where eq = GEq.genericEq
 
 derive instance newtypeBox :: Newtype Box _
 
@@ -90,9 +110,13 @@ data Dash =
 
 derive instance genericDash :: Generic Dash _
 
-instance encodeDash :: Encode Dash where encode = genericEncode defaultOptions
+instance encodeDash :: Encode Dash where encode = genericEncode jOpts
 
-instance decodeDash :: Decode Dash where decode = genericDecode defaultOptions
+instance decodeDash :: Decode Dash where decode = genericDecode jOpts
+
+instance showDash :: Show Dash where show = GShow.genericShow
+
+instance eqDash :: Eq Dash where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -107,9 +131,13 @@ newtype FontFeatureSettings =
 
 derive instance genericFontFeatureSettings :: Generic FontFeatureSettings _
 
-instance encodeFontFeatureSettings :: Encode FontFeatureSettings where encode = genericEncode defaultOptions
+instance encodeFontFeatureSettings :: Encode FontFeatureSettings where encode = genericEncode jOpts
 
-instance decodeFontFeatureSettings :: Decode FontFeatureSettings where decode = genericDecode defaultOptions
+instance decodeFontFeatureSettings :: Decode FontFeatureSettings where decode = genericDecode jOpts
+
+instance showFontFeatureSettings :: Show FontFeatureSettings where show = GShow.genericShow
+
+instance eqFontFeatureSettings :: Eq FontFeatureSettings where eq = GEq.genericEq
 
 derive instance newtypeFontFeatureSettings :: Newtype FontFeatureSettings _
 

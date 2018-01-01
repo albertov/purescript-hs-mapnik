@@ -14,8 +14,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 data ImageFilter =
     Blur
   | Emboss
@@ -36,9 +40,13 @@ data ImageFilter =
 
 derive instance genericImageFilter :: Generic ImageFilter _
 
-instance encodeImageFilter :: Encode ImageFilter where encode = genericEncode defaultOptions
+instance encodeImageFilter :: Encode ImageFilter where encode = genericEncode jOpts
 
-instance decodeImageFilter :: Decode ImageFilter where decode = genericDecode defaultOptions
+instance decodeImageFilter :: Decode ImageFilter where decode = genericDecode jOpts
+
+instance showImageFilter :: Show ImageFilter where show = GShow.genericShow
+
+instance eqImageFilter :: Eq ImageFilter where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -147,9 +155,13 @@ newtype ColorStop =
 
 derive instance genericColorStop :: Generic ColorStop _
 
-instance encodeColorStop :: Encode ColorStop where encode = genericEncode defaultOptions
+instance encodeColorStop :: Encode ColorStop where encode = genericEncode jOpts
 
-instance decodeColorStop :: Decode ColorStop where decode = genericDecode defaultOptions
+instance decodeColorStop :: Decode ColorStop where decode = genericDecode jOpts
+
+instance showColorStop :: Show ColorStop where show = GShow.genericShow
+
+instance eqColorStop :: Eq ColorStop where eq = GEq.genericEq
 
 derive instance newtypeColorStop :: Newtype ColorStop _
 

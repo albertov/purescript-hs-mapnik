@@ -13,16 +13,24 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 data Color =
     RGBA Int Int Int Int
 
 derive instance genericColor :: Generic Color _
 
-instance encodeColor :: Encode Color where encode = genericEncode defaultOptions
+instance encodeColor :: Encode Color where encode = genericEncode jOpts
 
-instance decodeColor :: Decode Color where decode = genericDecode defaultOptions
+instance decodeColor :: Decode Color where decode = genericDecode jOpts
+
+instance showColor :: Show Color where show = GShow.genericShow
+
+instance eqColor :: Eq Color where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------

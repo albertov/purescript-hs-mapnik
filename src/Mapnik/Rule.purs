@@ -15,8 +15,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Rule =
     Rule {
       name :: Maybe String
@@ -30,9 +34,13 @@ newtype Rule =
 
 derive instance genericRule :: Generic Rule _
 
-instance encodeRule :: Encode Rule where encode = genericEncode defaultOptions
+instance encodeRule :: Encode Rule where encode = genericEncode jOpts
 
-instance decodeRule :: Decode Rule where decode = genericDecode defaultOptions
+instance decodeRule :: Decode Rule where decode = genericDecode jOpts
+
+instance showRule :: Show Rule where show = GShow.genericShow
+
+instance eqRule :: Eq Rule where eq = GEq.genericEq
 
 derive instance newtypeRule :: Newtype Rule _
 

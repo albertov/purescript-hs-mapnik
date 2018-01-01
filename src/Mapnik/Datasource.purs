@@ -14,16 +14,24 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Datasource =
     Datasource (StrMap Value)
 
 derive instance genericDatasource :: Generic Datasource _
 
-instance encodeDatasource :: Encode Datasource where encode = genericEncode defaultOptions
+instance encodeDatasource :: Encode Datasource where encode = genericEncode jOpts
 
-instance decodeDatasource :: Decode Datasource where decode = genericDecode defaultOptions
+instance decodeDatasource :: Decode Datasource where decode = genericDecode jOpts
+
+instance showDatasource :: Show Datasource where show = GShow.genericShow
+
+instance eqDatasource :: Eq Datasource where eq = GEq.genericEq
 
 derive instance newtypeDatasource :: Newtype Datasource _
 

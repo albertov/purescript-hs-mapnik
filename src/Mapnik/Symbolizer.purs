@@ -16,7 +16,10 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
 import Data.Array (head)
 import Data.Maybe (maybe)
@@ -26,6 +29,7 @@ import Data.List.NonEmpty as NEL
 import Data.StrMap as SM
 import Data.Traversable (traverse)
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 data Symbolizer =
     PointSymbolizer {
       file :: Maybe PathExpression
@@ -218,9 +222,13 @@ data Symbolizer =
 
 derive instance genericSymbolizer :: Generic Symbolizer _
 
-instance encodeSymbolizer :: Encode Symbolizer where encode = genericEncode defaultOptions
+instance encodeSymbolizer :: Encode Symbolizer where encode = genericEncode jOpts
 
-instance decodeSymbolizer :: Decode Symbolizer where decode = genericDecode defaultOptions
+instance decodeSymbolizer :: Decode Symbolizer where decode = genericDecode jOpts
+
+instance showSymbolizer :: Show Symbolizer where show = GShow.genericShow
+
+instance eqSymbolizer :: Eq Symbolizer where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -309,9 +317,13 @@ data Prop a =
 
 derive instance genericProp :: Generic (Prop a) _
 
-instance encodeProp :: Encode a => Encode (Prop a) where encode = genericEncode defaultOptions
+instance encodeProp :: Encode a => Encode (Prop a) where encode = genericEncode jOpts
 
-instance decodeProp :: Decode a => Decode (Prop a) where decode = genericDecode defaultOptions
+instance decodeProp :: Decode a => Decode (Prop a) where decode = genericDecode jOpts
+
+instance showProp :: Show a => Show (Prop a) where show = GShow.genericShow
+
+instance eqProp :: Eq a => Eq (Prop a) where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -338,9 +350,13 @@ newtype Stop =
 
 derive instance genericStop :: Generic Stop _
 
-instance encodeStop :: Encode Stop where encode = genericEncode defaultOptions
+instance encodeStop :: Encode Stop where encode = genericEncode jOpts
 
-instance decodeStop :: Decode Stop where decode = genericDecode defaultOptions
+instance decodeStop :: Decode Stop where decode = genericDecode jOpts
+
+instance showStop :: Show Stop where show = GShow.genericShow
+
+instance eqStop :: Eq Stop where eq = GEq.genericEq
 
 derive instance newtypeStop :: Newtype Stop _
 
@@ -360,9 +376,13 @@ newtype Colorizer =
 
 derive instance genericColorizer :: Generic Colorizer _
 
-instance encodeColorizer :: Encode Colorizer where encode = genericEncode defaultOptions
+instance encodeColorizer :: Encode Colorizer where encode = genericEncode jOpts
 
-instance decodeColorizer :: Decode Colorizer where decode = genericDecode defaultOptions
+instance decodeColorizer :: Decode Colorizer where decode = genericDecode jOpts
+
+instance showColorizer :: Show Colorizer where show = GShow.genericShow
+
+instance eqColorizer :: Eq Colorizer where eq = GEq.genericEq
 
 derive instance newtypeColorizer :: Newtype Colorizer _
 
@@ -391,9 +411,13 @@ newtype TextProperties =
 
 derive instance genericTextProperties :: Generic TextProperties _
 
-instance encodeTextProperties :: Encode TextProperties where encode = genericEncode defaultOptions
+instance encodeTextProperties :: Encode TextProperties where encode = genericEncode jOpts
 
-instance decodeTextProperties :: Decode TextProperties where decode = genericDecode defaultOptions
+instance decodeTextProperties :: Decode TextProperties where decode = genericDecode jOpts
+
+instance showTextProperties :: Show TextProperties where show = GShow.genericShow
+
+instance eqTextProperties :: Eq TextProperties where eq = GEq.genericEq
 
 derive instance newtypeTextProperties :: Newtype TextProperties _
 
@@ -413,9 +437,13 @@ newtype TextSymProperties =
 
 derive instance genericTextSymProperties :: Generic TextSymProperties _
 
-instance encodeTextSymProperties :: Encode TextSymProperties where encode = genericEncode defaultOptions
+instance encodeTextSymProperties :: Encode TextSymProperties where encode = genericEncode jOpts
 
-instance decodeTextSymProperties :: Decode TextSymProperties where decode = genericDecode defaultOptions
+instance decodeTextSymProperties :: Decode TextSymProperties where decode = genericDecode jOpts
+
+instance showTextSymProperties :: Show TextSymProperties where show = GShow.genericShow
+
+instance eqTextSymProperties :: Eq TextSymProperties where eq = GEq.genericEq
 
 derive instance newtypeTextSymProperties :: Newtype TextSymProperties _
 
@@ -433,9 +461,13 @@ newtype GroupSymProperties =
 
 derive instance genericGroupSymProperties :: Generic GroupSymProperties _
 
-instance encodeGroupSymProperties :: Encode GroupSymProperties where encode = genericEncode defaultOptions
+instance encodeGroupSymProperties :: Encode GroupSymProperties where encode = genericEncode jOpts
 
-instance decodeGroupSymProperties :: Decode GroupSymProperties where decode = genericDecode defaultOptions
+instance decodeGroupSymProperties :: Decode GroupSymProperties where decode = genericDecode jOpts
+
+instance showGroupSymProperties :: Show GroupSymProperties where show = GShow.genericShow
+
+instance eqGroupSymProperties :: Eq GroupSymProperties where eq = GEq.genericEq
 
 derive instance newtypeGroupSymProperties :: Newtype GroupSymProperties _
 
@@ -471,6 +503,18 @@ instance decodeGroupRule :: Decode GroupRule where
     where
       error = throwError $ NEL.singleton $ ForeignError "Expected field 'symbolizers'"
 
+instance showGroupRule :: Show GroupRule where
+  show (GroupRule r) = ("GroupRule { symbolizers: "
+                    <> show r.symbolizers
+                    <> ", filter: " <> show r.filter
+                    <> ", repeatKey: " <> show r.repeatKey
+                    <> "}")
+
+instance eqGroupRule :: Eq GroupRule where
+  eq (GroupRule a) (GroupRule b) = a.symbolizers `eq` b.symbolizers &&
+                                   a.filter      `eq` b.filter &&
+                                   a.repeatKey   `eq` b.repeatKey
+
 derive instance newtypeGroupRule :: Newtype GroupRule _
 
 
@@ -490,9 +534,13 @@ data GroupLayout =
 
 derive instance genericGroupLayout :: Generic GroupLayout _
 
-instance encodeGroupLayout :: Encode GroupLayout where encode = genericEncode defaultOptions
+instance encodeGroupLayout :: Encode GroupLayout where encode = genericEncode jOpts
 
-instance decodeGroupLayout :: Decode GroupLayout where decode = genericDecode defaultOptions
+instance decodeGroupLayout :: Decode GroupLayout where decode = genericDecode jOpts
+
+instance showGroupLayout :: Show GroupLayout where show = GShow.genericShow
+
+instance eqGroupLayout :: Eq GroupLayout where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------
@@ -528,9 +576,13 @@ newtype TextLayoutProperties =
 
 derive instance genericTextLayoutProperties :: Generic TextLayoutProperties _
 
-instance encodeTextLayoutProperties :: Encode TextLayoutProperties where encode = genericEncode defaultOptions
+instance encodeTextLayoutProperties :: Encode TextLayoutProperties where encode = genericEncode jOpts
 
-instance decodeTextLayoutProperties :: Decode TextLayoutProperties where decode = genericDecode defaultOptions
+instance decodeTextLayoutProperties :: Decode TextLayoutProperties where decode = genericDecode jOpts
+
+instance showTextLayoutProperties :: Show TextLayoutProperties where show = GShow.genericShow
+
+instance eqTextLayoutProperties :: Eq TextLayoutProperties where eq = GEq.genericEq
 
 derive instance newtypeTextLayoutProperties :: Newtype TextLayoutProperties _
 
@@ -557,9 +609,13 @@ newtype TextFormatProperties =
 
 derive instance genericTextFormatProperties :: Generic TextFormatProperties _
 
-instance encodeTextFormatProperties :: Encode TextFormatProperties where encode = genericEncode defaultOptions
+instance encodeTextFormatProperties :: Encode TextFormatProperties where encode = genericEncode jOpts
 
-instance decodeTextFormatProperties :: Decode TextFormatProperties where decode = genericDecode defaultOptions
+instance decodeTextFormatProperties :: Decode TextFormatProperties where decode = genericDecode jOpts
+
+instance showTextFormatProperties :: Show TextFormatProperties where show = GShow.genericShow
+
+instance eqTextFormatProperties :: Eq TextFormatProperties where eq = GEq.genericEq
 
 derive instance newtypeTextFormatProperties :: Newtype TextFormatProperties _
 
@@ -613,10 +669,34 @@ instance encodeFormat :: Encode Format where
   encode (Format f) = toForeign $ SM.insert "Format" o $ SM.empty
     where o = toForeign
             $ SM.insert "font" (encode f.font)
+            $ SM.insert "textSize" (encode f.textSize)
+            $ SM.insert "opacity" (encode f.opacity)
+            $ SM.insert "characterSpacing" (encode f.characterSpacing)
+            $ SM.insert "lineSpacing" (encode f.lineSpacing)
+            $ SM.insert "wrapBefore" (encode f.wrapBefore)
+            $ SM.insert "repeatWrapChar" (encode f.repeatWrapChar)
+            $ SM.insert "textTransform" (encode f.textTransform)
+            $ SM.insert "fill" (encode f.fill)
+            $ SM.insert "haloFill" (encode f.haloFill)
+            $ SM.insert "haloRadius" (encode f.haloRadius)
+            $ SM.insert "ffSettings" (encode f.ffSettings)
+            $ SM.insert "next" (encode f.next)
             $ SM.empty
   encode (FormatLayout f) = toForeign $ SM.insert "FormatLayout" o $ SM.empty
     where o = toForeign
             $ SM.insert "dx" (encode f.dx)
+            $ SM.insert "dy" (encode f.dy)
+            $ SM.insert "orientation" (encode f.orientation)
+            $ SM.insert "textRatio" (encode f.textRatio)
+            $ SM.insert "wrapWidth" (encode f.wrapWidth)
+            $ SM.insert "wrapChar" (encode f.wrapChar)
+            $ SM.insert "wrapBefore" (encode f.wrapBefore)
+            $ SM.insert "repeatWrapChar" (encode f.repeatWrapChar)
+            $ SM.insert "rotateDisplacement" (encode f.rotateDisplacement)
+            $ SM.insert "horizontalAlignment" (encode f.horizontalAlignment)
+            $ SM.insert "justifyAlignment" (encode f.justifyAlignment)
+            $ SM.insert "verticalAlignment" (encode f.verticalAlignment)
+            $ SM.insert "next" (encode f.next)
             $ SM.empty
   encode NullFormat = toForeign $ SM.insert "NullFormat" o $ SM.empty
     where o = toForeign []
@@ -664,7 +744,70 @@ instance decodeFormat :: Decode Format where
 
       error = throwError $ NEL.singleton $ ForeignError "Expected 'next' key"
       invalid = throwError $ NEL.singleton $ ForeignError "Invalid Format"
-      
+
+instance showFormat :: Show Format where
+  show (FormatExp e) = "FormatExp " <> show e
+  show (FormatList e) = "FormatList " <> show e
+  show (FormatList e) = "FormatList " <> show e
+  show (Format f) = "Format { "
+                 <> "font: " <> show f.font <> ", "
+                 <> "textSize: " <> show f.textSize <> ", "
+                 <> "opacity: " <> show f.opacity <> ", "
+                 <> "characterSpacing: " <> show f.characterSpacing <> ", "
+                 <> "lineSpacing: " <> show f.lineSpacing <> ", "
+                 <> "wrapBefore: " <> show f.wrapBefore <> ", "
+                 <> "repeatWrapChar: " <> show f.repeatWrapChar <> ", "
+                 <> "textTransform: " <> show f.textTransform <> ", "
+                 <> "fill: " <> show f.fill <> ", "
+                 <> "haloFill: " <> show f.haloFill <> ", "
+                 <> "ffSettings: " <> show f.ffSettings <> ", "
+                 <> "next: " <> show f.next <> "}"
+  show (FormatLayout f) = "FormatLayout { "
+                 <> "dx: " <> show f.dx <> ", "
+                 <> "dy: " <> show f.dy <> ", "
+                 <> "orientation: " <> show f.orientation <> ", "
+                 <> "textRatio: " <> show f.textRatio <> ", "
+                 <> "wrapWidth: " <> show f.wrapWidth <> ", "
+                 <> "wrapChar: " <> show f.wrapChar <> ", "
+                 <> "wrapBefore: " <> show f.wrapBefore <> ", "
+                 <> "repeatWrapChar: " <> show f.repeatWrapChar <> ", "
+                 <> "horizontalAlignment: " <> show f.horizontalAlignment <> ", "
+                 <> "justifyAlignment: " <> show f.justifyAlignment <> ", "
+                 <> "verticalAlignment: " <> show f.verticalAlignment <> ", "
+                 <> "next: " <> show f.next <> "}"
+  show NullFormat = "NullFormat"
+
+instance eqFormat :: Eq Format where
+  eq (FormatExp a) (FormatExp b) = eq a b
+  eq (FormatList a) (FormatList b) = eq a b
+  eq (Format a) (Format b) = eq a.font b.font
+                          && eq a.textSize b.textSize
+                          && eq a.opacity b.opacity
+                          && eq a.lineSpacing b.lineSpacing
+                          && eq a.wrapBefore b.wrapBefore
+                          && eq a.repeatWrapChar b.repeatWrapChar
+                          && eq a.textTransform b.textTransform
+                          && eq a.fill b.fill
+                          && eq a.haloFill b.haloFill
+                          && eq a.haloRadius b.haloRadius
+                          && eq a.ffSettings b.ffSettings
+                          && eq a.next b.next
+  eq (FormatLayout a) (FormatLayout b) = eq a.dx b.dx
+                                      && eq a.dy b.dy
+                                      && eq a.orientation b.orientation
+                                      && eq a.textRatio b.textRatio
+                                      && eq a.wrapWidth b.wrapWidth
+                                      && eq a.wrapChar b.wrapChar
+                                      && eq a.wrapBefore b.wrapBefore
+                                      && eq a.repeatWrapChar b.repeatWrapChar
+                                      && eq a.rotateDisplacement b.rotateDisplacement
+                                      && eq a.horizontalAlignment b.horizontalAlignment
+                                      && eq a.justifyAlignment b.justifyAlignment
+                                      && eq a.verticalAlignment b.verticalAlignment
+                                      && eq a.next b.next
+  eq NullFormat NullFormat = true
+  eq _ _ = false
+
 
 --------------------------------------------------------------------------------
 _FormatExp :: Prism' Format Expression
@@ -703,9 +846,13 @@ newtype TextPlacements =
 
 derive instance genericTextPlacements :: Generic TextPlacements _
 
-instance encodeTextPlacements :: Encode TextPlacements where encode = genericEncode defaultOptions
+instance encodeTextPlacements :: Encode TextPlacements where encode = genericEncode jOpts
 
-instance decodeTextPlacements :: Decode TextPlacements where decode = genericDecode defaultOptions
+instance decodeTextPlacements :: Decode TextPlacements where decode = genericDecode jOpts
+
+instance showTextPlacements :: Show TextPlacements where show = GShow.genericShow
+
+instance eqTextPlacements :: Eq TextPlacements where eq = GEq.genericEq
 
 derive instance newtypeTextPlacements :: Newtype TextPlacements _
 
@@ -720,9 +867,13 @@ data Font =
 
 derive instance genericFont :: Generic Font _
 
-instance encodeFont :: Encode Font where encode = genericEncode defaultOptions
+instance encodeFont :: Encode Font where encode = genericEncode jOpts
 
-instance decodeFont :: Decode Font where decode = genericDecode defaultOptions
+instance decodeFont :: Decode Font where decode = genericDecode jOpts
+
+instance showFont :: Show Font where show = GShow.genericShow
+
+instance eqFont :: Eq Font where eq = GEq.genericEq
 
 
 --------------------------------------------------------------------------------

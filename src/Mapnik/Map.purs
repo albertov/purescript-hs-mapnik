@@ -20,8 +20,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Map a =
     Map {
       backgroundColor :: Maybe Color
@@ -41,9 +45,13 @@ newtype Map a =
 
 derive instance genericMap :: Generic (Map a) _
 
-instance encodeMap :: Encode a => Encode (Map a) where encode = genericEncode defaultOptions
+instance encodeMap :: Encode a => Encode (Map a) where encode = genericEncode jOpts
 
-instance decodeMap :: Decode a => Decode (Map a) where decode = genericDecode defaultOptions
+instance decodeMap :: Decode a => Decode (Map a) where decode = genericDecode jOpts
+
+instance showMap :: Show a => Show (Map a) where show = GShow.genericShow
+
+instance eqMap :: Eq a => Eq (Map a) where eq = GEq.genericEq
 
 derive instance newtypeMap :: Newtype (Map a) _
 

@@ -14,8 +14,12 @@ import Prelude
 import Data.Generic.Rep (class Generic)
 import Data.Foreign.Class (class Decode, class Encode, decode, encode)
 import Data.Foreign.Generic (defaultOptions, genericEncode, genericDecode)
+import Data.Foreign.Generic.Types (Options, SumEncoding(..))
 import Data.Foreign.Generic.Class (class GenericDecode, class GenericEncode)
+import Data.Generic.Rep.Eq as GEq
+import Data.Generic.Rep.Show as GShow
 
+jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
 newtype Layer a =
     Layer {
       name :: String
@@ -34,9 +38,13 @@ newtype Layer a =
 
 derive instance genericLayer :: Generic (Layer a) _
 
-instance encodeLayer :: Encode a => Encode (Layer a) where encode = genericEncode defaultOptions
+instance encodeLayer :: Encode a => Encode (Layer a) where encode = genericEncode jOpts
 
-instance decodeLayer :: Decode a => Decode (Layer a) where decode = genericDecode defaultOptions
+instance decodeLayer :: Decode a => Decode (Layer a) where decode = genericDecode jOpts
+
+instance showLayer :: Show a => Show (Layer a) where show = GShow.genericShow
+
+instance eqLayer :: Eq a => Eq (Layer a) where eq = GEq.genericEq
 
 derive instance newtypeLayer :: Newtype (Layer a) _
 
