@@ -1,22 +1,26 @@
 diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
---- src/Mapnik/Symbolizer.purs	2018-01-01 18:00:48.235409935 +0100
-+++ src.modified/Mapnik/Symbolizer.purs	2018-01-01 18:00:14.781254014 +0100
-@@ -21,6 +21,14 @@
+--- src/Mapnik/Symbolizer.purs	2018-01-01 19:39:55.159861208 +0100
++++ src.modified/Mapnik/Symbolizer.purs	2018-01-01 19:39:18.598455838 +0100
+@@ -21,6 +21,18 @@
  import Data.Generic.Rep.Eq as GEq
  import Data.Generic.Rep.Show as GShow
  
 +import Data.Array (head)
 +import Data.Maybe (maybe)
-+import Data.Foreign (Foreign, F, ForeignError(..), toForeign)
++import Data.Foreign (Foreign, F, ForeignError(..), toForeign, isNull)
 +import Control.Monad.Error.Class (throwError)
 +import Data.List.NonEmpty as NEL
 +import Data.StrMap as SM
 +import Data.Traversable (traverse)
 +
++decodeMay Nothing = pure Nothing
++decodeMay (Just s) | isNull s = pure Nothing
++decodeMay (Just s) = decode s
++
  jOpts = defaultOptions { sumEncoding = ObjectWithSingleField, unwrapSingleConstructors = true}
  data Symbolizer =
      PointSymbolizer {
-@@ -478,13 +486,34 @@
+@@ -478,13 +490,34 @@
  
  derive instance genericGroupRule :: Generic GroupRule _
  
@@ -38,8 +42,8 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +  decode json = decode json >>= \ obj -> do
 +    symbolizersJ <- maybe error pure $ SM.lookup "symbolizers" obj
 +    symbolizers <- traverse decode =<< decode symbolizersJ
-+    filter <- traverse decode (SM.lookup "filter" obj)
-+    repeatKey <- traverse decode (SM.lookup "repeatKey" obj)
++    filter <- decodeMay (SM.lookup "filter" obj)
++    repeatKey <- decodeMay (SM.lookup "repeatKey" obj)
 +    pure (GroupRule {symbolizers,filter,repeatKey})
 +    where
 +      error = throwError $ NEL.singleton $ ForeignError "Expected field 'symbolizers'"
@@ -58,7 +62,7 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
  
  derive instance newtypeGroupRule :: Newtype GroupRule _
  
-@@ -633,13 +662,151 @@
+@@ -633,13 +666,151 @@
  
  derive instance genericFormat :: Generic Format _
  
@@ -117,33 +121,33 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
 +      go "FormatList" xs =
 +        FormatList <$> (traverse decode =<< decode xs)
 +      go "Format" f = decode f >>= \ o -> do
-+        font <- traverse decode (SM.lookup "font" o)
-+        textSize <- traverse decode (SM.lookup "textSize" o)
-+        opacity <- traverse decode (SM.lookup "opacity" o)
-+        characterSpacing <- traverse decode (SM.lookup "characterSpacing" o)
-+        lineSpacing <- traverse decode (SM.lookup "lineSpacing" o)
-+        wrapBefore <- traverse decode (SM.lookup "wrapBefore" o)
-+        repeatWrapChar <- traverse decode (SM.lookup "repeatWrapChar" o)
-+        textTransform <- traverse decode (SM.lookup "textTransform" o)
-+        fill <- traverse decode (SM.lookup "fill" o)
-+        haloFill <- traverse decode (SM.lookup "haloFill" o)
-+        haloRadius <- traverse decode (SM.lookup "haloRadius" o)
-+        ffSettings <- traverse decode (SM.lookup "ffSettings" o)
++        font <- decodeMay (SM.lookup "font" o)
++        textSize <- decodeMay (SM.lookup "textSize" o)
++        opacity <- decodeMay (SM.lookup "opacity" o)
++        characterSpacing <- decodeMay (SM.lookup "characterSpacing" o)
++        lineSpacing <- decodeMay (SM.lookup "lineSpacing" o)
++        wrapBefore <- decodeMay (SM.lookup "wrapBefore" o)
++        repeatWrapChar <- decodeMay (SM.lookup "repeatWrapChar" o)
++        textTransform <- decodeMay (SM.lookup "textTransform" o)
++        fill <- decodeMay (SM.lookup "fill" o)
++        haloFill <- decodeMay (SM.lookup "haloFill" o)
++        haloRadius <- decodeMay (SM.lookup "haloRadius" o)
++        ffSettings <- decodeMay (SM.lookup "ffSettings" o)
 +        next <- maybe error decode (SM.lookup "next" o)
 +        pure (Format {font,textSize,opacity,characterSpacing,lineSpacing,wrapBefore,repeatWrapChar,textTransform,fill,haloFill,haloRadius,ffSettings,next})
 +      go "FormatLayout" f = decode f >>= \ o -> do
-+        dx <- traverse decode (SM.lookup "dx" o)
-+        dy <- traverse decode (SM.lookup "dy" o)
-+        orientation <- traverse decode (SM.lookup "orientation" o)
-+        textRatio <- traverse decode (SM.lookup "textRatio" o)
-+        wrapWidth <- traverse decode (SM.lookup "wrapWidth" o)
-+        wrapChar <- traverse decode (SM.lookup "wrapChar" o)
-+        wrapBefore <- traverse decode (SM.lookup "wrapBefore" o)
-+        repeatWrapChar <- traverse decode (SM.lookup "repeatWrapChar" o)
-+        rotateDisplacement <- traverse decode (SM.lookup "rotateDisplacement" o)
-+        horizontalAlignment <- traverse decode (SM.lookup "horizontalAlignment" o)
-+        justifyAlignment <- traverse decode (SM.lookup "justifyAlignment" o)
-+        verticalAlignment <- traverse decode (SM.lookup "verticalAlignment" o)
++        dx <- decodeMay (SM.lookup "dx" o)
++        dy <- decodeMay (SM.lookup "dy" o)
++        orientation <- decodeMay (SM.lookup "orientation" o)
++        textRatio <- decodeMay (SM.lookup "textRatio" o)
++        wrapWidth <- decodeMay (SM.lookup "wrapWidth" o)
++        wrapChar <- decodeMay (SM.lookup "wrapChar" o)
++        wrapBefore <- decodeMay (SM.lookup "wrapBefore" o)
++        repeatWrapChar <- decodeMay (SM.lookup "repeatWrapChar" o)
++        rotateDisplacement <- decodeMay (SM.lookup "rotateDisplacement" o)
++        horizontalAlignment <- decodeMay (SM.lookup "horizontalAlignment" o)
++        justifyAlignment <- decodeMay (SM.lookup "justifyAlignment" o)
++        verticalAlignment <- decodeMay (SM.lookup "verticalAlignment" o)
 +        next <- maybe error decode (SM.lookup "next" o)
 +        pure (FormatLayout
 +             {dx,dy,orientation,textRatio,wrapWidth,wrapBefore,wrapChar,repeatWrapChar,rotateDisplacement,horizontalAlignment,justifyAlignment,verticalAlignment,next})
@@ -217,3 +221,4 @@ diff -ur src/Mapnik/Symbolizer.purs src.modified/Mapnik/Symbolizer.purs
  
  
  --------------------------------------------------------------------------------
+Only in src.modified/Mapnik: .Symbolizer.purs.swp
