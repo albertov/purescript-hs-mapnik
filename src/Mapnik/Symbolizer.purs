@@ -845,8 +845,18 @@ _NullFormat = prism' (\_ -> NullFormat) f
     f _ = Nothing
 
 --------------------------------------------------------------------------------
-newtype TextPlacements =
-    Dummy TextSymProperties
+data TextPlacements =
+    Simple {
+      defaults :: TextSymProperties
+    , positions :: Prop SimplePlacementPosition
+    }
+  | List {
+      defaults :: TextSymProperties
+    , placements :: Array TextSymProperties
+    }
+  | Dummy {
+      defaults :: TextSymProperties
+    }
 
 derive instance genericTextPlacements :: Generic TextPlacements _
 
@@ -858,12 +868,50 @@ instance showTextPlacements :: Show TextPlacements where show = GShow.genericSho
 
 instance eqTextPlacements :: Eq TextPlacements where eq = GEq.genericEq
 
-derive instance newtypeTextPlacements :: Newtype TextPlacements _
+
+--------------------------------------------------------------------------------
+_Simple :: Prism' TextPlacements { defaults :: TextSymProperties, positions :: Prop SimplePlacementPosition }
+_Simple = prism' Simple f
+  where
+    f (Simple r) = Just r
+    f _ = Nothing
+
+_List :: Prism' TextPlacements { defaults :: TextSymProperties, placements :: Array TextSymProperties }
+_List = prism' List f
+  where
+    f (List r) = Just r
+    f _ = Nothing
+
+_Dummy :: Prism' TextPlacements { defaults :: TextSymProperties }
+_Dummy = prism' Dummy f
+  where
+    f (Dummy r) = Just r
+    f _ = Nothing
+
+--------------------------------------------------------------------------------
+newtype SimplePlacementPosition =
+    SimplePlacementPosition {
+      textSizes :: Array Int
+    , directions :: Array PlacementDirection
+    }
+
+derive instance genericSimplePlacementPosition :: Generic SimplePlacementPosition _
+
+instance encodeSimplePlacementPosition :: Encode SimplePlacementPosition where encode = genericEncode jOpts
+
+instance decodeSimplePlacementPosition :: Decode SimplePlacementPosition where decode = genericDecode jOpts
+
+instance showSimplePlacementPosition :: Show SimplePlacementPosition where show = GShow.genericShow
+
+instance eqSimplePlacementPosition :: Eq SimplePlacementPosition where eq = GEq.genericEq
+
+derive instance newtypeSimplePlacementPosition :: Newtype SimplePlacementPosition _
 
 
 --------------------------------------------------------------------------------
-_Dummy :: Iso' TextPlacements TextSymProperties
-_Dummy = _Newtype
+_SimplePlacementPosition :: Iso' SimplePlacementPosition { textSizes :: Array Int, directions :: Array PlacementDirection}
+_SimplePlacementPosition = _Newtype
+
 --------------------------------------------------------------------------------
 data Font =
     FontSetName String
