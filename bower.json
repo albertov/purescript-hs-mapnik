@@ -27,6 +27,6 @@
     "purescript-tuples": "^4.1.0",
     "purescript-generics-rep": "^5.3.0",
     "purescript-maps": "^3.5.2",
-    "purescript-foreign-generic": "meteogrid/purescript-foreign-generic#thelonius"
+    "purescript-foreign-generic": "meteogrid/purescript-foreign-generic#525ecb747144a0fd117592c79042dab419398203"
   }
 }
